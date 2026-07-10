@@ -722,7 +722,7 @@
 
         <div class="gallery-card bg-soil-100 rounded-2xl overflow-hidden border border-soil-200 hover:shadow-md transition-all duration-300 group" data-category="Northside">
           <div class="h-64 overflow-hidden relative">
-            <img src="large/Krigia, Stonecrop, and Columbine.webp" srcset="small/Krigia, Stonecrop, and Columbine.webp 400w, medium/Krigia, Stonecrop, and Columbine.webp 800w, large/Krigia, Stonecrop, and Columbine.webp 1200w" sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw" data-large-src="large/Krigia, Stonecrop, and Columbine.webp" loading="lazy" alt="Krigia, Stonecrop, and Columbine" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+            <img src="large/Krigia Stonecrop and Columbine.webp" srcset="small/Krigia Stonecrop and Columbine.webp 400w, medium/Krigia Stonecrop and Columbine.webp 800w, large/Krigia Stonecrop and Columbine.webp 1200w" sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw" data-large-src="large/Krigia Stonecrop and Columbine.webp" loading="lazy" alt="Krigia, Stonecrop, and Columbine" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
           </div>
           <div class="p-6 space-y-2">
             <div class="flex justify-between items-center">
@@ -1116,58 +1116,83 @@
   </footer>
 
   <script>
-    // Smooth Transition State Manager (Client-side router)
-    function navigateTo(pageId) {
-      const activeNavClasses = ['text-forest-900', 'bg-forest-100/80'];
-      const inactiveNavClasses = ['text-stone-600', 'hover:text-forest-800', 'hover:bg-stone-100'];
+    // Updated Smooth Transition State Manager
+function navigateTo(pageId, updateHistory = true) {
+  const activeNavClasses = ['text-forest-900', 'bg-forest-100/80'];
+  const inactiveNavClasses = ['text-stone-600', 'hover:text-forest-800', 'hover:bg-stone-100'];
 
-      // Hide all pages, show targeted page with scaling/fade
-      document.querySelectorAll('.page-section').forEach(section => {
-        if (section.id === `page-${pageId}`) {
-          section.classList.remove('page-hidden');
-          section.classList.add('page-active');
-        } else {
-          section.classList.add('page-hidden');
-          section.classList.remove('page-active');
-        }
-      });
-
-      // Update Desktop Header Buttons State
-      document.querySelectorAll('.nav-btn').forEach(btn => {
-        if (btn.id === `nav-${pageId}`) {
-          btn.classList.add(...activeNavClasses);
-          btn.classList.remove(...inactiveNavClasses);
-        } else {
-          btn.classList.remove(...activeNavClasses);
-          btn.classList.add(...inactiveNavClasses);
-        }
-      });
-
-      // Update Mobile Header Buttons State
-      document.querySelectorAll('.mobile-nav-btn').forEach(btn => {
-        const isCurrent = btn.textContent.toLowerCase().replace(/\s+/g, '') === pageId || 
-                          (pageId === 'resources' && btn.textContent.includes('Resources')) ||
-                          (pageId === 'contact' && btn.textContent.includes('Contact'));
-        if (isCurrent) {
-          btn.classList.add(...activeNavClasses);
-          btn.classList.remove(...inactiveNavClasses);
-        } else {
-          btn.classList.remove(...activeNavClasses);
-          btn.classList.add(...inactiveNavClasses);
-        }
-      });
-
-      // Auto-close Mobile Menu drawer
-      const mobileMenu = document.getElementById('mobile-menu');
-      const menuIconOpen = document.getElementById('menu-icon-open');
-      const menuIconClose = document.getElementById('menu-icon-close');
-      mobileMenu.classList.add('hidden');
-      menuIconOpen.classList.remove('hidden');
-      menuIconClose.classList.add('hidden');
-
-      // Scroll smoothly to top of main frame
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+  // 1. Hide all pages, show targeted page
+  document.querySelectorAll('.page-section').forEach(section => {
+    if (section.id === `page-${pageId}`) {
+      section.classList.remove('page-hidden');
+      section.classList.add('page-active');
+    } else {
+      section.classList.add('page-hidden');
+      section.classList.remove('page-active');
     }
+  });
+
+  // 2. Update Desktop Header Buttons State
+  document.querySelectorAll('.nav-btn').forEach(btn => {
+    if (btn.id === `nav-${pageId}`) {
+      btn.classList.add(...activeNavClasses);
+      btn.classList.remove(...inactiveNavClasses);
+    } else {
+      btn.classList.remove(...activeNavClasses);
+      btn.classList.add(...inactiveNavClasses);
+    }
+  });
+
+  // 3. Update Mobile Header Buttons State
+  document.querySelectorAll('.mobile-nav-btn').forEach(btn => {
+    const isCurrent = btn.textContent.toLowerCase().replace(/\s+/g, '') === pageId || 
+                      (pageId === 'resources' && btn.textContent.includes('Resources')) ||
+                      (pageId === 'contact' && btn.textContent.includes('Contact'));
+    if (isCurrent) {
+      btn.classList.add(...activeNavClasses);
+      btn.classList.remove(...inactiveNavClasses);
+    } else {
+      btn.classList.remove(...activeNavClasses);
+      btn.classList.add(...inactiveNavClasses);
+    }
+  });
+
+  // 4. Add History API support so refresh works
+  if (updateHistory) {
+    window.history.pushState({ pageId: pageId }, "", `/${pageId}`);
+  }
+
+  // 5. Auto-close Mobile Menu
+  const mobileMenu = document.getElementById('mobile-menu');
+  const menuIconOpen = document.getElementById('menu-icon-open');
+  const menuIconClose = document.getElementById('menu-icon-close');
+  mobileMenu.classList.add('hidden');
+  menuIconOpen.classList.remove('hidden');
+  menuIconClose.classList.add('hidden');
+
+  // 6. Scroll to top
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+// Listen for browser back/forward buttons
+window.addEventListener('popstate', (event) => {
+  const pageId = event.state?.pageId || 'home';
+  navigateTo(pageId, false);
+});
+
+// Run this on page load to detect the URL in the address bar
+document.addEventListener('DOMContentLoaded', () => {
+  const path = window.location.pathname.replace('/', '');
+  // If the path exists as a page, go to it, otherwise default to home
+  if (path && document.getElementById(`page-${path}`)) {
+    navigateTo(path, false);
+  } else {
+    // Only navigate to home if we are at the root
+    if (window.location.pathname === '/') {
+      navigateTo('home', false);
+    }
+  }
+});
+    
 
     // Toggle Mobile Navigation Drawer
     function toggleMobileMenu() {
