@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Native Plant Database | Searchable Reference — Wild City Cincinnati</title>
+  <meta name="description" content="Search and filter Wild City's native plant reference sheet: 400+ species for the Cincinnati / Northside ecoregion, browsable by native status, light, moisture, bloom time, and pollinator value.">
+  <link rel="canonical" href="https://wildcitycincy.org/plant-database.html">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Wild City">
+  <meta property="og:title" content="Native Plant Database | Searchable Reference — Wild City Cincinnati">
+  <meta property="og:description" content="Search and filter Wild City's native plant reference sheet: 400+ species for the Cincinnati / Northside ecoregion, browsable by native status, light, moisture, bloom time, and pollinator value.">
+  <meta property="og:url" content="https://wildcitycincy.org/plant-database.html">
+  <meta property="og:image" content="https://wildcitycincy.org/large/Adam_s%20Garden%20with%20Summer%20Blooms%20%283%29.webp">
+  <meta property="og:locale" content="en_US">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Native Plant Database | Searchable Reference — Wild City Cincinnati">
+  <meta name="twitter:description" content="Search and filter Wild City's native plant reference sheet: 400+ species for the Cincinnati / Northside ecoregion, browsable by native status, light, moisture, bloom time, and pollinator value.">
+  <meta name="twitter:image" content="https://wildcitycincy.org/large/Adam_s%20Garden%20with%20Summer%20Blooms%20%283%29.webp">
+  <meta name="twitter:image:alt" content="Native habitat garden planted by Wild City in Northside, Cincinnati">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "NGO",
+        "@id": "https://wildcitycincy.org/#organization",
+        "name": "Wild City",
+        "alternateName": "Wild City Urban Biodiversity Project",
+        "url": "https://wildcitycincy.org/",
+        "logo": "https://wildcitycincy.org/26_07_11_adam_logo_color.png",
+        "image": "https://wildcitycincy.org/large/Adam_s%20Garden%20with%20Summer%20Blooms%20%283%29.webp",
+        "description": "Wild City is a neighbor-led urban biodiversity project in Northside, Cincinnati, Ohio, propagating native plants and building publicly accessible habitat gardens.",
+        "email": "wildcitynorthside@gmail.com",
+        "areaServed": {
+          "@type": "Place",
+          "name": "Northside, Cincinnati, Ohio"
+        },
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Cincinnati",
+          "addressRegion": "OH",
+          "addressCountry": "US"
+        }
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://wildcitycincy.org/#website",
+        "url": "https://wildcitycincy.org/",
+        "name": "Wild City",
+        "publisher": { "@id": "https://wildcitycincy.org/#organization" }
+      },
+      {
+        "@type": "WebPage",
+        "@id": "https://wildcitycincy.org/plant-database.html#webpage",
+        "url": "https://wildcitycincy.org/plant-database.html",
+        "name": "Native Plant Database | Searchable Reference — Wild City Cincinnati",
+        "description": "Search and filter Wild City's native plant reference sheet: 400+ species for the Cincinnati / Northside ecoregion, browsable by native status, light, moisture, bloom time, and pollinator value.",
+        "isPartOf": { "@id": "https://wildcitycincy.org/#website" },
+        "about": { "@id": "https://wildcitycincy.org/#organization" },
+        "inLanguage": "en-US"
+      }
+    ]
+  }
+  </script>
+
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="android-chrome-192x192.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="android-chrome-512x512.png">
+  <meta name="theme-color" content="#1d3327">
+
+
+
+<link rel="stylesheet" href="dist/output.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+
+  <style>
+    /* Hide scrollbars elegantly */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+    /* Skip link: visually hidden until focused */
+    .skip-link {
+      position: absolute;
+      left: -9999px;
+      top: 0;
+      z-index: 100;
+    }
+    .skip-link:focus {
+      left: 1rem;
+      top: 1rem;
+    }
+  </style>
+</head>
+<body class="bg-soil-50 text-stone-800 font-sans min-h-screen flex flex-col antialiased selection:bg-forest-100 selection:text-forest-900">
+
+  <a href="#main-content" class="skip-link px-4 py-2 bg-forest-900 text-white rounded-lg text-sm font-semibold shadow-lg">Skip to main content</a>
+
+  <div class="bg-forest-900 text-forest-100 text-xs py-2 px-4 text-center font-medium tracking-wider uppercase border-b border-forest-800 flex items-center justify-center space-x-2">
+    <span class="inline-block w-2 h-2 rounded-full bg-amber-400 animate-pulse" aria-hidden="true"></span>
+    <span>Outer Bluegrass and Eastern Corn Belt Plains Ecoregion • Cincinnati, Ohio</span>
+  </div>
+
+  <header class="sticky top-0 bg-soil-50/95 backdrop-blur-md border-b border-soil-200 z-50">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-20">
+
+        <a href="/" class="flex items-center space-x-3 group">
+          <img src="26_07_11_adam_logo_color.png" alt="Wild City Logo" class="h-10 md:h-12 w-auto">
+          <div>
+            <p class="text-xs text-forest-600 tracking-wider font-semibold uppercase">Urban Biodiversity Project</p>
+          </div>
+        </a>
+
+        <nav class="hidden md:flex items-center space-x-1" aria-label="Primary">
+          <a href="/" class="nav-btn px-4 py-2 rounded-lg text-sm font-medium text-stone-600 hover:text-forest-800 hover:bg-stone-100 transition-all">Home</a>
+          <a href="about.html" class="nav-btn px-4 py-2 rounded-lg text-sm font-medium text-stone-600 hover:text-forest-800 hover:bg-stone-100 transition-all">About</a>
+          <a href="gallery.html" class="nav-btn px-4 py-2 rounded-lg text-sm font-medium text-stone-600 hover:text-forest-800 hover:bg-stone-100 transition-all">Gallery</a>
+          <a href="resources.html" class="nav-btn px-4 py-2 rounded-lg text-sm font-medium text-stone-600 hover:text-forest-800 hover:bg-stone-100 transition-all">Resources</a>
+          <a href="plant-database.html" class="nav-btn px-4 py-2 rounded-lg text-sm font-medium text-forest-900 bg-forest-100/80 transition-all" aria-current="page">Plant Database</a>
+          <a href="contact.html" class="nav-btn px-4 py-2 rounded-lg text-sm font-medium text-stone-600 hover:text-forest-800 hover:bg-stone-100 transition-all">Contact Us</a>
+        </nav>
+
+        <div class="flex items-center md:hidden">
+          <button onclick="toggleMobileMenu()" id="mobile-menu-toggle" class="p-2 rounded-xl text-stone-600 hover:text-forest-800 hover:bg-stone-100 focus:outline-none" aria-label="Toggle menu" aria-expanded="false" aria-controls="mobile-menu">
+            <svg id="menu-icon-open" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"/>
+            </svg>
+            <svg id="menu-icon-close" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+    <div id="mobile-menu" class="hidden md:hidden border-b border-soil-200 bg-soil-50 transition-all ease-in-out duration-300">
+      <nav class="px-4 pt-2 pb-6 space-y-1.5 shadow-inner" aria-label="Primary mobile">
+        <a href="/" class="mobile-nav-btn block w-full text-left px-4 py-3 rounded-xl text-base font-medium text-stone-600 hover:text-forest-800 hover:bg-stone-100">Home</a>
+        <a href="about.html" class="mobile-nav-btn block w-full text-left px-4 py-3 rounded-xl text-base font-medium text-stone-600 hover:text-forest-800 hover:bg-stone-100">About</a>
+        <a href="gallery.html" class="mobile-nav-btn block w-full text-left px-4 py-3 rounded-xl text-base font-medium text-stone-600 hover:text-forest-800 hover:bg-stone-100">Gallery</a>
+        <a href="resources.html" class="mobile-nav-btn block w-full text-left px-4 py-3 rounded-xl text-base font-medium text-stone-600 hover:text-forest-800 hover:bg-stone-100">Resources</a>
+        <a href="plant-database.html" class="mobile-nav-btn block w-full text-left px-4 py-3 rounded-xl text-base font-medium text-forest-900 bg-forest-100/80" aria-current="page">Plant Database</a>
+        <a href="contact.html" class="mobile-nav-btn block w-full text-left px-4 py-3 rounded-xl text-base font-medium text-stone-600 hover:text-forest-800 hover:bg-stone-100">Contact Us</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main-content" class="flex-grow max-w-6xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+
+    <div class="space-y-8">
+
+      <div class="text-center max-w-2xl mx-auto space-y-4">
+        <span class="inline-block text-xs px-3 py-1 bg-forest-100 text-forest-800 font-bold rounded-full uppercase tracking-wider">Reference Sheet, Reimagined</span>
+        <h2 class="text-3xl md:text-4xl font-bold font-serif text-forest-900">Native Plant Database</h2>
+        <p class="text-stone-600 text-sm leading-relaxed">
+          Search and filter our full <a href="resources.html" class="text-forest-700 font-semibold underline underline-offset-4 decoration-forest-300 hover:decoration-forest-700 transition-colors">Native Plants Reference Sheet</a> &mdash; <span id="total-count-inline">740</span> species (trees, shrubs, vines, grasses &amp; sedges, forbs &amp; ferns, and aquatic plants) suited to the 45223 ecosystem, cross-referenced for their value to local pollinators, birds, and moths.
+        </p>
+      </div>
+
+      <!-- Search -->
+      <div class="max-w-2xl mx-auto w-full">
+        <label for="plant-search" class="sr-only">Search plants by common or botanical name</label>
+        <div class="relative">
+          <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-stone-400" aria-hidden="true">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M17 10a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+          </span>
+          <input type="text" id="plant-search" placeholder="Search by common name, botanical name, or keyword&hellip;" class="w-full pl-11 pr-11 py-3.5 rounded-2xl border border-soil-200 bg-white shadow-sm text-sm text-stone-800 placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-forest-500 focus:border-transparent">
+          <button id="clear-search-btn" onclick="clearSearch()" class="hidden absolute inset-y-0 right-0 flex items-center pr-4 text-stone-400 hover:text-forest-700" aria-label="Clear search">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+
+        <!-- Filters -->
+        <aside class="lg:col-span-3 lg:sticky lg:top-28 lg:max-h-[calc(100vh-8rem)] flex flex-col">
+          <div class="bg-white rounded-2xl border border-soil-200 shadow-sm p-5 flex flex-col min-h-0 flex-1">
+            <div class="flex items-center justify-between shrink-0 pb-4 mb-2 border-b border-soil-100">
+              <h3 class="text-sm font-bold font-serif text-forest-900 uppercase tracking-wide">Filters</h3>
+              <button onclick="resetFilters()" class="text-xs font-semibold text-forest-700 hover:text-forest-900 underline underline-offset-4 decoration-forest-300">Reset</button>
+            </div>
+
+            <div class="space-y-6 overflow-y-auto pr-1 -mr-1">
+
+            <fieldset class="space-y-2">
+              <legend class="text-[11px] font-bold uppercase tracking-wider text-stone-400 mb-2">Plant Type</legend>
+              <div id="filter-category" class="space-y-1.5"></div>
+            </fieldset>
+
+            <fieldset class="space-y-2">
+              <legend class="text-[11px] font-bold uppercase tracking-wider text-stone-400 mb-2">Native Status</legend>
+              <div id="filter-status" class="space-y-1.5"></div>
+              <details class="pt-1">
+                <summary class="text-xs text-forest-700 cursor-pointer hover:text-forest-900 select-none">What do these codes mean?</summary>
+                <p class="text-xs text-stone-500 leading-relaxed mt-2">
+                  Codes rank confidence that a plant supports local wildlife here in Northside. <strong class="text-forest-800">N1</strong> is native to Hamilton County (highest confidence); <strong class="text-forest-800">N2&ndash;N4</strong> are native to progressively broader ecoregions; <strong class="text-forest-800">N5</strong> is native to the wider Eastern Temperate Forest but least likely to be recognized by our local insects. See the <a href="resources.html" class="underline decoration-forest-300 hover:decoration-forest-700">Resources page</a> for the full explanation.
+                </p>
+              </details>
+            </fieldset>
+
+            <fieldset class="space-y-2">
+              <legend class="text-[11px] font-bold uppercase tracking-wider text-stone-400 mb-2">Light</legend>
+              <div id="filter-light" class="space-y-1.5"></div>
+            </fieldset>
+
+            <fieldset class="space-y-2">
+              <legend class="text-[11px] font-bold uppercase tracking-wider text-stone-400 mb-2">Moisture</legend>
+              <div id="filter-moisture" class="space-y-1.5"></div>
+            </fieldset>
+
+            <fieldset class="space-y-2">
+              <legend class="text-[11px] font-bold uppercase tracking-wider text-stone-400 mb-2">Height (ft)</legend>
+              <div class="flex items-center gap-2">
+                <label for="height-min" class="sr-only">Minimum height in feet</label>
+                <input type="number" id="height-min" inputmode="decimal" min="0" step="0.25" placeholder="Min" class="w-full text-sm border border-soil-200 rounded-lg px-2.5 py-1.5 text-stone-700 placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-forest-500">
+                <span class="text-stone-400 text-xs shrink-0">to</span>
+                <label for="height-max" class="sr-only">Maximum height in feet</label>
+                <input type="number" id="height-max" inputmode="decimal" min="0" step="0.25" placeholder="Max" class="w-full text-sm border border-soil-200 rounded-lg px-2.5 py-1.5 text-stone-700 placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-forest-500">
+              </div>
+              <p class="text-[11px] text-stone-400">Shows plants whose full height range fits within what you enter.</p>
+            </fieldset>
+
+            <fieldset class="space-y-2">
+              <legend class="text-[11px] font-bold uppercase tracking-wider text-stone-400 mb-2">Bloom Season</legend>
+              <div id="filter-bloom" class="space-y-1.5"></div>
+            </fieldset>
+
+            </div>
+          </div>
+        </aside>
+
+        <!-- Results -->
+        <div class="lg:col-span-9 space-y-4">
+          <div class="flex flex-wrap items-center justify-between gap-3">
+            <p class="text-sm text-stone-500" id="results-count" role="status" aria-live="polite">Showing 740 of 740 species</p>
+            <div class="flex items-center space-x-2">
+              <label for="sort-select" class="text-xs font-semibold text-stone-500 uppercase tracking-wider">Sort</label>
+              <select id="sort-select" onchange="applyFilters()" class="text-sm border border-soil-200 rounded-xl px-3 py-2 bg-white text-stone-700 focus:outline-none focus:ring-2 focus:ring-forest-500">
+                <option value="name">Name (A&ndash;Z)</option>
+                <option value="status">Native Status (best first)</option>
+                <option value="buzz">Pollinator Value (highest first)</option>
+              </select>
+            </div>
+          </div>
+
+          <div id="plant-grid" class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4"></div>
+
+          <div id="empty-state" class="hidden text-center py-16 space-y-3">
+            <p class="text-forest-900 font-serif font-bold text-lg">No plants match your filters</p>
+            <p class="text-stone-500 text-sm">Try clearing a filter or searching a different term.</p>
+            <button onclick="resetFilters()" class="mt-2 px-5 py-2 bg-forest-800 hover:bg-forest-700 text-white font-bold rounded-xl transition-colors text-sm">Reset Filters</button>
+          </div>
+        </div>
+
+      </div>
+
+      <p class="text-xs text-stone-400 text-center max-w-2xl mx-auto">
+        Sourced from Wild City's <a href="resources.html" class="underline decoration-soil-300 hover:decoration-forest-600 hover:text-forest-700">Native Plants Reference Sheet</a>, cross-referencing Xerces Society, Illinois Wildflowers, Missouri Botanical Garden Plant Finder, Lady Bird Johnson Wildflower Center, Prairie Moon Nursery, BONAP, and our own garden observations. Updated periodically &mdash; not a substitute for the live sheet.
+      </p>
+
+    </div>
+
+  </main>
+
+  <!-- Plant Detail Modal -->
+  <div id="plant-modal-backdrop" class="fixed inset-0 bg-stone-900/50 backdrop-blur-sm z-50 hidden items-center justify-center p-4 transition-all duration-300" role="dialog" aria-modal="true" aria-labelledby="plant-modal-title">
+    <div class="bg-soil-50 rounded-2xl max-w-2xl w-full max-h-[85vh] shadow-2xl border border-soil-200 overflow-hidden transform scale-95 transition-all duration-300 relative flex flex-col" id="plant-modal-panel">
+      <div class="bg-forest-900 text-white p-5 flex justify-between items-start space-x-4 shrink-0">
+        <div>
+          <h3 class="font-serif font-bold text-xl" id="plant-modal-title">Plant Name</h3>
+          <p class="text-forest-200 text-sm italic" id="plant-modal-botanical">Botanical name</p>
+        </div>
+        <button onclick="closePlantModal()" id="plant-modal-close-btn" class="text-forest-200 hover:text-white p-1 rounded-lg focus:outline-none shrink-0" aria-label="Close plant details">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
+
+      <div class="p-6 space-y-5 overflow-y-auto" id="plant-modal-body">
+      </div>
+    </div>
+  </div>
+
+  <footer class="bg-soil-100 border-t border-soil-200 mt-auto">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-stone-500">
+
+      <div class="text-center md:text-left space-y-1">
+        <p class="font-bold text-forest-900">Wild City Urban Biodiversity Project</p>
+        <p>&copy; 2026. Stewarding biodiverse habitat in the Greater Cincinnati region</p>
+      </div>
+
+      <nav class="flex flex-wrap items-center justify-center gap-4" aria-label="Footer">
+        <a href="about.html" class="hover:text-forest-800 transition-colors">About Us</a>
+        <span aria-hidden="true">&bull;</span>
+        <a href="resources.html" class="hover:text-forest-800 transition-colors">Resources</a>
+        <span aria-hidden="true">&bull;</span>
+        <a href="plant-database.html" class="hover:text-forest-800 transition-colors">Plant Database</a>
+        <span aria-hidden="true">&bull;</span>
+        <a href="contact.html" class="hover:text-forest-800 transition-colors">Contact Us</a>
+      </nav>
+    </div>
+  </footer>
+
+  <script>
+    // Toggle Mobile Navigation Drawer (with aria-expanded + focus handling)
+    function toggleMobileMenu() {
+      const mobileMenu = document.getElementById('mobile-menu');
+      const menuIconOpen = document.getElementById('menu-icon-open');
+      const menuIconClose = document.getElementById('menu-icon-close');
+      const toggleBtn = document.getElementById('mobile-menu-toggle');
+      const opening = mobileMenu.classList.contains('hidden');
+
+      if (opening) {
+        mobileMenu.classList.remove('hidden');
+        menuIconOpen.classList.add('hidden');
+        menuIconClose.classList.remove('hidden');
+        toggleBtn.setAttribute('aria-expanded', 'true');
+        const firstLink = mobileMenu.querySelector('a');
+        if (firstLink) firstLink.focus();
+      } else {
+        mobileMenu.classList.add('hidden');
+        menuIconOpen.classList.remove('hidden');
+        menuIconClose.classList.add('hidden');
+        toggleBtn.setAttribute('aria-expanded', 'false');
+      }
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        const mobileMenu = document.getElementById('mobile-menu');
+        if (mobileMenu && !mobileMenu.classList.contains('hidden')) {
+          toggleMobileMenu();
+          document.getElementById('mobile-menu-toggle').focus();
+        }
+      }
+    });
+  </script>
+
+  <script src="plant-data.js"></script>
+  <script>
+    (function () {
+      const PLANTS = window.NATIVE_PLANTS || [];
+
+      const STATUS_ORDER = ['N1', 'N2', 'N3', 'N4', 'N5', ''];
+      const STATUS_LABEL = {
+        N1: 'N1 — Hamilton County native',
+        N2: 'N2 — Local ecoregion native',
+        N3: 'N3 — Regional native (toss-up)',
+        N4: 'N4 — Southeastern Plains native',
+        N5: 'N5 — Eastern Forest native',
+        '': 'Unrated'
+      };
+      const STATUS_BADGE = {
+        N1: 'bg-forest-800 text-white',
+        N2: 'bg-forest-600 text-white',
+        N3: 'bg-amber-500 text-white',
+        N4: 'bg-soil-300 text-soil-900',
+        N5: 'bg-stone-300 text-stone-700',
+        '': 'bg-stone-200 text-stone-500'
+      };
+      const LIGHT_OPTIONS = ['Full Sun', 'Part Sun', 'Part Shade', 'Shade'];
+      const MOISTURE_OPTIONS = ['Dry', 'Medium', 'Moist', 'Wet'];
+      const BLOOM_OPTIONS = ['Spring', 'Summer', 'Fall'];
+      const CATEGORY_OPTIONS = ['Forbs & Ferns', 'Shrubs', 'Trees', 'Vines', 'Grasses & Sedges', 'Aquatic'];
+
+      const CATEGORY_COLORS = {
+        'Forbs & Ferns': 'bg-forest-50 text-forest-800 border border-forest-200',
+        'Shrubs': 'bg-amber-50 text-amber-800 border border-amber-200',
+        'Trees': 'bg-soil-100 text-soil-900 border border-soil-300',
+        'Vines': 'bg-sky-50 text-sky-800 border border-sky-200',
+        'Grasses & Sedges': 'bg-lime-50 text-lime-800 border border-lime-200',
+        'Aquatic': 'bg-cyan-50 text-cyan-800 border border-cyan-200'
+      };
+      const LIGHT_COLORS = {
+        'Full Sun': 'bg-yellow-300 text-yellow-950 border border-yellow-400',
+        'Part Sun': 'bg-amber-100 text-amber-800 border border-amber-200',
+        'Part Shade': 'bg-emerald-50 text-emerald-700 border border-emerald-200',
+        'Shade': 'bg-slate-600 text-white border border-slate-700'
+      };
+      const MOISTURE_COLORS = {
+        'Dry': 'bg-orange-50 text-orange-800 border border-orange-200',
+        'Medium': 'bg-sky-50 text-sky-700 border border-sky-200',
+        'Moist': 'bg-sky-300 text-sky-900 border border-sky-400',
+        'Wet': 'bg-blue-600 text-white border border-blue-700'
+      };
+      const FALLBACK_BADGE = 'bg-stone-100 text-stone-600 border border-stone-200';
+
+      const state = {
+        query: '',
+        category: new Set(),
+        status: new Set(),
+        light: new Set(),
+        moisture: new Set(),
+        bloom: new Set(),
+        heightMin: null,
+        heightMax: null,
+        sort: 'name'
+      };
+
+      function escapeHtml(str) {
+        return String(str || '').replace(/[&<>"']/g, (c) => ({
+          '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+        }[c]));
+      }
+
+      function buildCheckboxGroup(containerId, options, stateSet, labelFn) {
+        const container = document.getElementById(containerId);
+        options.forEach((opt) => {
+          const id = containerId + '-' + opt.replace(/\s+/g, '-').toLowerCase();
+          const wrap = document.createElement('label');
+          wrap.className = 'flex items-center space-x-2 text-sm text-stone-600 cursor-pointer hover:text-forest-800';
+          wrap.innerHTML = `
+            <input type="checkbox" id="${id}" value="${escapeHtml(opt)}" class="rounded border-soil-300 text-forest-700 focus:ring-forest-500 h-4 w-4">
+            <span>${escapeHtml(labelFn ? labelFn(opt) : opt)}</span>
+          `;
+          const input = wrap.querySelector('input');
+          input.addEventListener('change', () => {
+            if (input.checked) stateSet.add(opt); else stateSet.delete(opt);
+            applyFilters();
+          });
+          container.appendChild(wrap);
+        });
+      }
+
+      buildCheckboxGroup('filter-category', CATEGORY_OPTIONS, state.category);
+      buildCheckboxGroup('filter-status', STATUS_ORDER.filter((s) => s), state.status, (s) => STATUS_LABEL[s]);
+      buildCheckboxGroup('filter-light', LIGHT_OPTIONS, state.light);
+      buildCheckboxGroup('filter-moisture', MOISTURE_OPTIONS, state.moisture);
+      buildCheckboxGroup('filter-bloom', BLOOM_OPTIONS, state.bloom);
+
+      // Build cards
+      const grid = document.getElementById('plant-grid');
+      const cards = PLANTS.map((p, idx) => {
+        const card = document.createElement('button');
+        card.type = 'button';
+        card.className = 'plant-card flex flex-col items-stretch justify-start text-left bg-white rounded-2xl border border-soil-200 shadow-sm p-5 space-y-3 hover:border-forest-300 hover:shadow-md transition-all focus:outline-none focus:ring-2 focus:ring-forest-500';
+        card.setAttribute('data-index', idx);
+        card.addEventListener('click', () => openPlantModal(idx));
+
+        const statusKey = p.status || '';
+        const badge = `<span class="text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded-full shrink-0 ${STATUS_BADGE[statusKey] || STATUS_BADGE['']}">${escapeHtml(statusKey || 'N/A')}</span>`;
+
+        const height = p.heightRange ? `${p.heightRange} ft` : (p.maxHeight ? `up to ${p.maxHeight} ft` : '');
+
+        function specRow(label, value) {
+          const display = value
+            ? `<span class="text-stone-700">${escapeHtml(value)}</span>`
+            : `<span class="text-stone-400 italic">Not specified</span>`;
+          return `
+            <div class="text-xs leading-snug">
+              <span class="block font-semibold text-stone-400 uppercase tracking-wide text-[10px] mb-0.5">${escapeHtml(label)}</span>
+              ${display}
+            </div>
+          `;
+        }
+
+        function bubbleRow(label, values, colorMap) {
+          const items = values && values.length
+            ? values.map((v) => `<span class="text-[10px] font-semibold px-2 py-0.5 rounded-full ${colorMap[v] || FALLBACK_BADGE}">${escapeHtml(v)}</span>`).join('')
+            : `<span class="text-stone-400 italic text-xs">Not specified</span>`;
+          return `
+            <div class="text-xs leading-snug">
+              <span class="block font-semibold text-stone-400 uppercase tracking-wide text-[10px] mb-1">${escapeHtml(label)}</span>
+              <div class="flex flex-wrap gap-1">${items}</div>
+            </div>
+          `;
+        }
+
+        card.innerHTML = `
+          <div class="flex items-start justify-between gap-2">
+            <h4 class="font-bold font-serif text-forest-900 leading-snug line-clamp-2">${escapeHtml(p.name)}</h4>
+            ${badge}
+          </div>
+          <p class="text-xs italic text-stone-500 font-mono line-clamp-1">${escapeHtml(p.botanical || '')}</p>
+          <div class="space-y-2.5 pt-2 border-t border-soil-100">
+            ${bubbleRow('Plant Type', p.category ? [p.category] : [], CATEGORY_COLORS)}
+            ${bubbleRow('Light Conditions', p.light || [], LIGHT_COLORS)}
+            ${bubbleRow('Soil Conditions', p.moisture || [], MOISTURE_COLORS)}
+            ${specRow('Height', height)}
+          </div>
+        `;
+        grid.appendChild(card);
+        return card;
+      });
+
+      const resultsCount = document.getElementById('results-count');
+      const emptyState = document.getElementById('empty-state');
+      const totalCountInline = document.getElementById('total-count-inline');
+      totalCountInline.textContent = PLANTS.length;
+
+      function matches(p) {
+        if (state.query) {
+          const haystack = ((p.name || '') + ' ' + (p.altNames || '') + ' ' + (p.botanical || '') + ' ' + (p.notes || '')).toLowerCase();
+          if (!haystack.includes(state.query)) return false;
+        }
+        if (state.category.size && !state.category.has(p.category || '')) return false;
+        if (state.status.size && !state.status.has(p.status || '')) return false;
+        if (state.light.size) {
+          const pl = p.light || [];
+          if (![...state.light].some((l) => pl.includes(l))) return false;
+        }
+        if (state.moisture.size) {
+          const pm = p.moisture || [];
+          if (![...state.moisture].some((m) => pm.includes(m))) return false;
+        }
+        if (state.bloom.size) {
+          const pb = p.bloom || [];
+          if (![...state.bloom].some((b) => pb.includes(b))) return false;
+        }
+        if (state.heightMin !== null || state.heightMax !== null) {
+          if (typeof p.heightMinFt !== 'number' || typeof p.heightMaxFt !== 'number') return false;
+          if (state.heightMin !== null && p.heightMinFt < state.heightMin) return false;
+          if (state.heightMax !== null && p.heightMaxFt > state.heightMax) return false;
+        }
+        return true;
+      }
+
+      function sortIndices(indices) {
+        const sort = state.sort;
+        return indices.slice().sort((a, b) => {
+          const pa = PLANTS[a], pb = PLANTS[b];
+          if (sort === 'status') {
+            const ra = STATUS_ORDER.indexOf(pa.status || '');
+            const rb = STATUS_ORDER.indexOf(pb.status || '');
+            if (ra !== rb) return ra - rb;
+          } else if (sort === 'buzz') {
+            const ba = typeof pa.buzzScore === 'number' ? pa.buzzScore : -1;
+            const bb = typeof pb.buzzScore === 'number' ? pb.buzzScore : -1;
+            if (ba !== bb) return bb - ba;
+          }
+          return pa.name.localeCompare(pb.name);
+        });
+      }
+
+      let debounceTimer;
+      function applyFilters() {
+        state.sort = document.getElementById('sort-select').value;
+        const visibleIndices = [];
+        PLANTS.forEach((p, idx) => { if (matches(p)) visibleIndices.push(idx); });
+        const ordered = sortIndices(visibleIndices);
+        const orderSet = new Set(ordered);
+
+        ordered.forEach((idx, order) => {
+          cards[idx].classList.remove('hidden');
+          cards[idx].style.order = order;
+        });
+        cards.forEach((card, idx) => {
+          if (!orderSet.has(idx)) card.classList.add('hidden');
+        });
+
+        resultsCount.textContent = `Showing ${ordered.length} of ${PLANTS.length} species`;
+        emptyState.classList.toggle('hidden', ordered.length !== 0);
+        grid.classList.toggle('hidden', ordered.length === 0);
+      }
+      window.applyFilters = applyFilters;
+
+      const searchInput = document.getElementById('plant-search');
+      const clearBtn = document.getElementById('clear-search-btn');
+      searchInput.addEventListener('input', () => {
+        clearTimeout(debounceTimer);
+        clearBtn.classList.toggle('hidden', !searchInput.value);
+        debounceTimer = setTimeout(() => {
+          state.query = searchInput.value.trim().toLowerCase();
+          applyFilters();
+        }, 150);
+      });
+
+      window.clearSearch = function () {
+        searchInput.value = '';
+        state.query = '';
+        clearBtn.classList.add('hidden');
+        applyFilters();
+        searchInput.focus();
+      };
+
+      const heightMinInput = document.getElementById('height-min');
+      const heightMaxInput = document.getElementById('height-max');
+      let heightDebounceTimer;
+      function onHeightInput() {
+        clearTimeout(heightDebounceTimer);
+        heightDebounceTimer = setTimeout(() => {
+          const minVal = parseFloat(heightMinInput.value);
+          const maxVal = parseFloat(heightMaxInput.value);
+          state.heightMin = Number.isFinite(minVal) ? minVal : null;
+          state.heightMax = Number.isFinite(maxVal) ? maxVal : null;
+          applyFilters();
+        }, 200);
+      }
+      heightMinInput.addEventListener('input', onHeightInput);
+      heightMaxInput.addEventListener('input', onHeightInput);
+
+      window.resetFilters = function () {
+        state.query = '';
+        state.category.clear();
+        state.status.clear();
+        state.light.clear();
+        state.moisture.clear();
+        state.bloom.clear();
+        state.heightMin = null;
+        state.heightMax = null;
+        searchInput.value = '';
+        clearBtn.classList.add('hidden');
+        heightMinInput.value = '';
+        heightMaxInput.value = '';
+        document.querySelectorAll('#filter-category input, #filter-status input, #filter-light input, #filter-moisture input, #filter-bloom input').forEach((el) => { el.checked = false; });
+        document.getElementById('sort-select').value = 'name';
+        applyFilters();
+      };
+
+      // Read URL query param (?q=) for deep-linking / cross-page searches
+      const urlParams = new URLSearchParams(window.location.search);
+      const initialQuery = urlParams.get('q');
+      if (initialQuery) {
+        searchInput.value = initialQuery;
+        state.query = initialQuery.trim().toLowerCase();
+        clearBtn.classList.remove('hidden');
+      }
+
+      applyFilters();
+
+      // --- Detail modal ---
+      let lastFocusedBeforePlantModal = null;
+
+      function statRow(label, value) {
+        if (value === undefined || value === null || value === '') return '';
+        return `<div class="flex justify-between gap-4 text-sm py-1.5 border-b border-soil-100 last:border-0"><span class="text-stone-500">${escapeHtml(label)}</span><span class="text-stone-800 font-medium text-right">${escapeHtml(value)}</span></div>`;
+      }
+
+      function tagList(items, colors, fallbackClasses) {
+        if (!items || !items.length) return '';
+        const classesFor = (typeof colors === 'string')
+          ? () => colors
+          : (v) => (colors && colors[v]) || fallbackClasses || FALLBACK_BADGE;
+        return `<div class="flex flex-wrap gap-1.5">${items.map((i) => `<span class="text-xs font-semibold px-2.5 py-1 rounded-full ${classesFor(i)}">${escapeHtml(i)}</span>`).join('')}</div>`;
+      }
+
+      function section(title, html) {
+        if (!html) return '';
+        return `<div class="space-y-2"><h5 class="text-xs font-bold uppercase tracking-wider text-forest-700">${escapeHtml(title)}</h5>${html}</div>`;
+      }
+
+      window.openPlantModal = function (idx) {
+        const p = PLANTS[idx];
+        lastFocusedBeforePlantModal = document.activeElement;
+
+        document.getElementById('plant-modal-title').textContent = p.name;
+        document.getElementById('plant-modal-botanical').textContent = p.botanical || '';
+
+        const statusKey = p.status || '';
+        const plantTypeTag = p.category ? tagList([p.category], CATEGORY_COLORS) : '';
+        const overviewStats = [
+          statRow('Native Status', p.status ? STATUS_LABEL[statusKey] : ''),
+          statRow('Status Notes', p.statusNote),
+          statRow('Rarity', p.rarity),
+          statRow('Also Known As', p.altNames && p.altNames !== p.name ? p.altNames : ''),
+          statRow('Lifespan', p.lifespan),
+          statRow('Max Height', p.maxHeight ? p.maxHeight + ' ft' : ''),
+          statRow('Height Range', p.heightRange ? p.heightRange + ' ft' : ''),
+          statRow('Spread', p.spreadWidth ? p.spreadWidth + ' ft' : ''),
+          statRow('Bloom Time', p.bloomDetail),
+        ].join('');
+
+        const growing = [
+          tagList(p.light, LIGHT_COLORS),
+          tagList(p.moisture, MOISTURE_COLORS),
+          tagList(p.soilType, 'bg-soil-100 text-soil-900 border border-soil-300'),
+        ].filter(Boolean).join('');
+
+        const growingStats = [
+          statRow('Root Type', p.root),
+          statRow('Leguminous', p.leguminous),
+          statRow('Erosion Control', p.erosionControl),
+          statRow('Pioneer Plant', p.pioneer),
+          statRow('r/K Selected', p.selection),
+          statRow('Ephemeral', p.ephemeral),
+          statRow('Winter Appeal', p.winterAppeal),
+        ].join('');
+
+        const ecologyStats = [
+          statRow('Lepidoptera Species Hosted', p.lepidopteraCount),
+          statRow('Lepidoptera Notes', p.lepidopteraNotes),
+          statRow('Specialist Pollinators', p.pollinators),
+          statRow('Bird Interactions', p.birds),
+          statRow('Pollinator Value (Buzz Score)', typeof p.buzzScore === 'number' ? p.buzzScore + ' / 11' : ''),
+          statRow('Showy Blooms', typeof p.showyBlooms === 'number' ? p.showyBlooms + ' / 10' : ''),
+          statRow('Showy Foliage', typeof p.showyFoliage === 'number' ? p.showyFoliage + ' / 10' : ''),
+          statRow('Fragrant', typeof p.fragrant === 'number' ? p.fragrant + ' / 3' : ''),
+        ].join('');
+
+        const availStats = [
+          statRow('Available to View', p.viewAvailable),
+          statRow('Seeds Available', p.seedsAvailable),
+          statRow('Generally Available to Buy', p.buyAvailable),
+          statRow('Vase Life as Cut Flower', p.vaseLife),
+          statRow("Gardener's Level", p.gardenerLevel),
+        ].join('');
+
+        const notesHtml = p.notes ? `<p class="text-sm text-stone-600 leading-relaxed whitespace-pre-line">${escapeHtml(p.notes)}</p>` : '';
+
+        document.getElementById('plant-modal-body').innerHTML = [
+          section('Overview', plantTypeTag + overviewStats),
+          section('Growing Conditions', growing + growingStats),
+          section('Ecology & Wildlife Value', ecologyStats),
+          section('Availability', availStats),
+          section('Notes & Sources', notesHtml),
+        ].filter(Boolean).join('<hr class="border-soil-200">');
+
+        const backdrop = document.getElementById('plant-modal-backdrop');
+        backdrop.classList.remove('hidden');
+        backdrop.classList.add('flex');
+        document.body.classList.add('overflow-hidden');
+        setTimeout(() => {
+          document.getElementById('plant-modal-panel').classList.remove('scale-95');
+          document.getElementById('plant-modal-panel').classList.add('scale-100');
+          document.getElementById('plant-modal-close-btn').focus();
+        }, 20);
+      };
+
+      window.closePlantModal = function () {
+        const backdrop = document.getElementById('plant-modal-backdrop');
+        document.getElementById('plant-modal-panel').classList.remove('scale-100');
+        document.getElementById('plant-modal-panel').classList.add('scale-95');
+        setTimeout(() => {
+          backdrop.classList.add('hidden');
+          backdrop.classList.remove('flex');
+          document.body.classList.remove('overflow-hidden');
+          if (lastFocusedBeforePlantModal) lastFocusedBeforePlantModal.focus();
+        }, 150);
+      };
+
+      document.getElementById('plant-modal-backdrop').addEventListener('click', (e) => {
+        if (e.target.id === 'plant-modal-backdrop') closePlantModal();
+      });
+
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          const backdrop = document.getElementById('plant-modal-backdrop');
+          if (!backdrop.classList.contains('hidden')) closePlantModal();
+        }
+      });
+    })();
+  </script>
+</body>
+</html>
