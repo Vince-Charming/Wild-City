@@ -1,4 +1,4 @@
-# Tailwind production build for wildcitycincy.org
+# Tailwind production build for commonwildcincy.org
 
 Your site currently loads Tailwind from the CDN (`<script src="https://cdn.tailwindcss.com">`),
 which ships the entire framework, unminified, to every visitor. This folder compiles a
