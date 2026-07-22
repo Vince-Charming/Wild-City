@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://wildcitycincy.org/sitemap.xml
+Sitemap: https://commonwildcincy.org/sitemap.xml
