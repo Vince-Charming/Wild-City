@@ -561,9 +561,9 @@
         const ordered = sortIndices(visibleIndices);
         const orderSet = new Set(ordered);
 
-        ordered.forEach((idx, order) => {
+        ordered.forEach((idx) => {
           cards[idx].classList.remove('hidden');
-          cards[idx].style.order = order;
+          grid.appendChild(cards[idx]);
         });
         cards.forEach((card, idx) => {
           if (!orderSet.has(idx)) card.classList.add('hidden');
