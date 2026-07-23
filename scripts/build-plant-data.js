@@ -150,11 +150,18 @@ function extractNums(str) {
 // are changed on purpose, update these anchors and the indices in
 // rowToPlant together.)
 // Labels verified identical across all six tabs at these columns. They span
-// from col 1 through the moisture block (col 32), so an inserted/deleted/
-// reordered column anywhere in that range trips the check. (Columns to the
-// right of ~32 — soil type, root, availability, notes — have tab-specific
-// sub-headers and aren't anchored; an insertion there is far less likely and
-// would at worst garble notes/availability text, not the core fields.)
+// col 1 through the soil block (col 38), which covers every identity field
+// (name, botanical, native status, category) AND every user-facing FILTER
+// field (light 27-30, moisture 31-34, soil 35-38). A column inserted,
+// deleted, or reordered anywhere in that range trips the check and the build
+// aborts rather than publishing mismapped data.
+//
+// Columns to the right of 38 (root, leguminous, erosion, lifespan,
+// availability, notes, vase life) have tab-specific or blank sub-headers and
+// can't be anchored the same way. Those are DISPLAY-ONLY detail fields, not
+// filters — a column inserted past col 38 could garble that detail text but
+// cannot silently corrupt the identity or filter fields. (If you restructure
+// columns past 38, update the indices in rowToPlant to match.)
 const HEADER_ANCHORS = [
   [1, /common name/i, 'Common Name(s)'],
   [2, /botanical/i, 'Botanical name(s)'],
@@ -166,6 +173,12 @@ const HEADER_ANCHORS = [
   [28, /part sun/i, 'Part Sun'],
   [31, /dry/i, 'Dry (moisture)'],
   [32, /med(ium)?/i, 'Medium (moisture)'],
+  [33, /moist/i, 'Moist (moisture)'],
+  [34, /wet/i, 'Wet (moisture)'],
+  [35, /sand/i, 'Sandy/Silty (soil)'],
+  [36, /loam/i, 'Loam/Rich (soil)'],
+  [37, /clay/i, 'Clay (soil)'],
+  [38, /nutrient/i, 'Nutrient Poor (soil)'],
 ];
 
 function assertExpectedLayout(cat, rows) {
@@ -359,6 +372,26 @@ async function main() {
     );
   }
 
+  // Relative floor: refuse a run that would shrink the catalog to under half of
+  // what's currently published. A normal edit adds/removes a few plants; a drop
+  // this large means a tab loaded only partially — abort rather than publish it.
+  let lastGoodCount = null;
+  if (fs.existsSync(OUT_JS)) {
+    try {
+      const prev = fs.readFileSync(OUT_JS, 'utf8');
+      const m = prev.match(/window\.NATIVE_PLANTS\s*=\s*(\[[\s\S]*\]);/);
+      if (m) lastGoodCount = JSON.parse(m[1]).length;
+    } catch (_) {
+      /* ignore — treat as no prior baseline */
+    }
+  }
+  if (lastGoodCount && allPlants.length < lastGoodCount * 0.5) {
+    throw new Error(
+      `Parsed ${allPlants.length} plants — less than half the ${lastGoodCount} currently ` +
+        `published. Aborting: the sheet almost certainly loaded incompletely.`
+    );
+  }
+
   const withBotanical = allPlants.filter((p) => p.botanical).length;
   console.log(`  (${withBotanical}/${allPlants.length} have a botanical name)`);
 
@@ -371,19 +404,23 @@ async function main() {
   const js = header + 'window.NATIVE_PLANTS = ' + JSON.stringify(allPlants) + ';\n';
 
   // ---- keep the two count fallbacks in plant-database.html honest ----
+  // These are static fallbacks only; the page's JS always renders the real
+  // count from the data at load time, so a missed patch here is cosmetic. Warn
+  // (don't fail) if the markup changed so the fallback isn't silently left stale.
   let html = fs.readFileSync(DB_HTML, 'utf8');
   const total = allPlants.length;
-  let htmlChanged = false;
   const htmlBefore = html;
-  html = html.replace(
-    /(<span id="total-count-inline">)\d+(<\/span>)/,
-    `$1${total}$2`
-  );
-  html = html.replace(
-    /Showing \d+ of \d+ species/,
-    `Showing ${total} of ${total} species`
-  );
-  htmlChanged = html !== htmlBefore;
+  const spanRe = /(<span id="total-count-inline">)\d+(<\/span>)/;
+  const showingRe = /Showing \d+ of \d+ species/;
+  if (!spanRe.test(html)) {
+    console.warn('  WARNING: could not find the #total-count-inline fallback in plant-database.html — leaving it as-is.');
+  }
+  if (!showingRe.test(html)) {
+    console.warn('  WARNING: could not find the "Showing N of N species" fallback in plant-database.html — leaving it as-is.');
+  }
+  html = html.replace(spanRe, `$1${total}$2`);
+  html = html.replace(showingRe, `Showing ${total} of ${total} species`);
+  const htmlChanged = html !== htmlBefore;
 
   if (DRY_RUN) {
     const current = fs.existsSync(OUT_JS) ? fs.readFileSync(OUT_JS, 'utf8') : '';
