@@ -184,7 +184,7 @@
 
     <div id="toast" class="fixed bottom-6 right-6 z-50 transform translate-y-12 opacity-0 pointer-events-none transition-all duration-300 ease-out bg-forest-900 text-white px-5 py-3 rounded-xl shadow-2xl flex items-center space-x-3 border border-forest-700" role="status" aria-live="polite">
       <span class="w-2 h-2 rounded-full bg-amber-400" aria-hidden="true"></span>
-      <span id="toast-text" class="text-sm font-medium">Action completed successfully.</span>
+      <span id="toast-text" class="text-sm font-medium">Ready.</span>
     </div>
 
     <div class="space-y-12">
@@ -394,28 +394,6 @@
 
   </main>
 
-  <div id="modal-backdrop" class="fixed inset-0 bg-stone-900/40 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 transition-all duration-300" role="dialog" aria-modal="true" aria-labelledby="modal-title">
-    <div class="bg-soil-100 rounded-2xl max-w-md w-full shadow-2xl border border-soil-200 overflow-hidden transform scale-95 transition-all duration-300 relative">
-      <div class="bg-forest-900 text-white p-5 flex justify-between items-center">
-        <h3 class="font-serif font-bold text-lg" id="modal-title">Success</h3>
-        <button onclick="closeModal()" id="modal-close-btn" class="text-forest-200 hover:text-white p-1 rounded-lg focus:outline-none" aria-label="Close dialog">
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-          </svg>
-        </button>
-      </div>
-
-      <div class="p-6 space-y-4">
-        <p class="text-stone-700 text-sm leading-relaxed" id="modal-body">
-          Your response has been safely recorded by the Alliance.
-        </p>
-        <button onclick="closeModal()" class="w-full py-2.5 bg-forest-800 hover:bg-forest-700 text-white font-bold rounded-xl transition-colors text-sm uppercase tracking-wider">
-          Close Window
-        </button>
-      </div>
-    </div>
-  </div>
-
   <div id="lightbox-modal" class="fixed inset-0 bg-stone-950/95 z-[100] hidden flex flex-col items-center justify-center p-4 transition-all duration-300 opacity-0 pointer-events-none select-none" onclick="closeLightbox()" role="dialog" aria-modal="true" aria-label="Image viewer">
     <button class="absolute top-6 right-6 text-stone-300 hover:text-white p-2.5 rounded-xl hover:bg-white/10 transition-colors z-50 focus:outline-none" aria-label="Close image" id="lightbox-close-btn" onclick="closeLightbox()">
       <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -532,81 +510,7 @@
       activeIcon.classList.remove('bg-soil-200', 'text-stone-600');
       activeIcon.classList.add('bg-forest-100', 'text-forest-700');
 
-      triggerToast('Document view synchronized.');
-    }
-
-    function handleFormSubmit(event) {
-      event.preventDefault();
-
-      const form = event.target;
-      const name = document.getElementById('contact-name').value;
-      const email = document.getElementById('contact-email').value;
-      const topicSelect = document.getElementById('contact-topic');
-      const topicName = topicSelect.options[topicSelect.selectedIndex].text;
-      const message = document.getElementById('contact-message').value;
-
-      fetch("https://api.web3forms.com/submit", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            "Accept": "application/json"
-        },
-        body: JSON.stringify({
-            "access_key": "12b4f77a-ceb6-4c67-883a-ee4af9b53400",
-            "Subject": "New Inquiry from CommonWild Website",
-            "From Name": name,
-            "Sender Email": email,
-            "Inquiry Topic": topicName,
-            "Message": message
-        })
-      })
-      .then(async (response) => {
-        let json = await response.json();
-        if (response.status == 200) {
-          document.getElementById('modal-title').innerText = 'Inquiry Submitted';
-          document.getElementById('modal-body').innerHTML = `
-            <p class="font-semibold text-forest-900 mb-2">Thank you, ${name}!</p>
-            <p class="text-stone-600 text-xs">
-              Your request regarding <strong>"${topicName}"</strong> has been successfully forwarded to our coordination team.
-            </p>
-            <p class="text-stone-600 text-xs mt-2">
-              The team will respond within 72 hours.
-            </p>
-          `;
-          openModal();
-          form.reset();
-        } else {
-          console.error("Submission error:", json);
-          alert("Something went wrong. Please try again later.");
-        }
-      })
-      .catch(error => {
-        console.error("Routing error:", error);
-        alert("Connection error. Please check your internet.");
-      });
-    }
-
-    // Modal Control Logic (focus-managed)
-    let lastFocusedBeforeModal = null;
-    function openModal() {
-      lastFocusedBeforeModal = document.activeElement;
-      const backdrop = document.getElementById('modal-backdrop');
-      backdrop.classList.remove('hidden');
-      setTimeout(() => {
-        backdrop.firstElementChild.classList.remove('scale-95');
-        backdrop.firstElementChild.classList.add('scale-100');
-        document.getElementById('modal-close-btn').focus();
-      }, 50);
-    }
-
-    function closeModal() {
-      const backdrop = document.getElementById('modal-backdrop');
-      backdrop.firstElementChild.classList.remove('scale-100');
-      backdrop.firstElementChild.classList.add('scale-95');
-      setTimeout(() => {
-        backdrop.classList.add('hidden');
-        if (lastFocusedBeforeModal) lastFocusedBeforeModal.focus();
-      }, 150);
+      triggerToast('View updated.');
     }
 
     function triggerToast(message) {

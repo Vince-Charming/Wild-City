@@ -184,7 +184,7 @@
 
     <div id="toast" class="fixed bottom-6 right-6 z-50 transform translate-y-12 opacity-0 pointer-events-none transition-all duration-300 ease-out bg-forest-900 text-white px-5 py-3 rounded-xl shadow-2xl flex items-center space-x-3 border border-forest-700" role="status" aria-live="polite">
       <span class="w-2 h-2 rounded-full bg-amber-400" aria-hidden="true"></span>
-      <span id="toast-text" class="text-sm font-medium">Action completed successfully.</span>
+      <span id="toast-text" class="text-sm font-medium">Ready.</span>
     </div>
 
     <div class="space-y-12">
@@ -285,7 +285,7 @@
 
       <div class="p-6 space-y-4">
         <p class="text-stone-700 text-sm leading-relaxed" id="modal-body">
-          Your response has been safely recorded by the Alliance.
+          Thank you — your message has been sent to CommonWild.
         </p>
         <button onclick="closeModal()" class="w-full py-2.5 bg-forest-800 hover:bg-forest-700 text-white font-bold rounded-xl transition-colors text-sm uppercase tracking-wider">
           Close Window
@@ -410,7 +410,7 @@
       activeIcon.classList.remove('bg-soil-200', 'text-stone-600');
       activeIcon.classList.add('bg-forest-100', 'text-forest-700');
 
-      triggerToast('Document view synchronized.');
+      triggerToast('View updated.');
     }
 
     function handleFormSubmit(event) {
