@@ -107,13 +107,61 @@
       left: 1rem;
       top: 1rem;
     }
+
+    /* Print view: hide navigation/chrome, print just the current filtered/sorted
+       results as a clean reference list. */
+    #print-header {
+      display: none;
+    }
+    @media print {
+      html, body {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      body * {
+        visibility: hidden;
+      }
+      #main-content, #main-content * {
+        visibility: visible;
+      }
+      .skip-link, #back-to-top-btn, aside, #search-bar,
+      #sort-select, label[for="sort-select"], #print-list-btn,
+      #plant-modal-backdrop, #empty-state, #db-hero, #results-count,
+      header, footer, #ecoregion-banner {
+        display: none !important;
+      }
+      #main-content {
+        position: static;
+        padding: 0;
+        margin: 0;
+        max-width: none;
+      }
+      #print-header {
+        display: block !important;
+        margin-bottom: 1rem;
+      }
+      #plant-grid {
+        display: block !important;
+      }
+      .plant-card {
+        display: inline-block !important;
+        width: 47%;
+        vertical-align: top;
+        break-inside: avoid;
+        box-shadow: none !important;
+        margin: 0 1.5% 1rem 0;
+      }
+      .plant-card.hidden {
+        display: none !important;
+      }
+    }
   </style>
 </head>
 <body class="bg-soil-50 text-stone-800 font-sans min-h-screen flex flex-col antialiased selection:bg-forest-100 selection:text-forest-900">
 
   <a href="#main-content" class="skip-link px-4 py-2 bg-forest-900 text-white rounded-lg text-sm font-semibold shadow-lg">Skip to main content</a>
 
-  <div class="bg-forest-900 text-forest-100 text-xs py-2 px-4 text-center font-medium tracking-wider uppercase border-b border-forest-800 flex items-center justify-center space-x-2">
+  <div id="ecoregion-banner" class="bg-forest-900 text-forest-100 text-xs py-2 px-4 text-center font-medium tracking-wider uppercase border-b border-forest-800 flex items-center justify-center space-x-2">
     <span class="inline-block w-2 h-2 rounded-full bg-amber-400 animate-pulse" aria-hidden="true"></span>
     <span>Outer Bluegrass and Eastern Corn Belt Plains Ecoregion • Cincinnati, Ohio</span>
   </div>
@@ -168,7 +216,7 @@
 
     <div class="space-y-8">
 
-      <div class="text-center max-w-2xl mx-auto space-y-4">
+      <div id="db-hero" class="text-center max-w-2xl mx-auto space-y-4">
         <span class="inline-block text-xs px-3 py-1 bg-forest-100 text-forest-800 font-bold rounded-full uppercase tracking-wider">Reference Sheet, Reimagined</span>
         <h2 class="text-3xl md:text-4xl font-bold font-serif text-forest-900">Native Plant Database</h2>
         <p class="text-stone-600 text-sm leading-relaxed">
@@ -177,7 +225,7 @@
       </div>
 
       <!-- Search -->
-      <div class="max-w-2xl mx-auto w-full">
+      <div id="search-bar" class="max-w-2xl mx-auto w-full">
         <label for="plant-search" class="sr-only">Search plants by common or botanical name</label>
         <div class="relative">
           <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-stone-400" aria-hidden="true">
@@ -251,6 +299,19 @@
               <div id="filter-bloom" class="space-y-1.5"></div>
             </fieldset>
 
+            <fieldset class="space-y-2">
+              <legend class="text-[11px] font-bold uppercase tracking-wider text-stone-400 mb-2">Plant Traits</legend>
+              <label class="flex items-center space-x-2 text-sm text-stone-600 cursor-pointer hover:text-forest-800">
+                <input type="checkbox" id="filter-leguminous" class="rounded border-soil-300 text-forest-700 focus:ring-forest-500 h-4 w-4">
+                <span>Leguminous (nitrogen-fixing)</span>
+              </label>
+              <label class="flex items-center space-x-2 text-sm text-stone-600 cursor-pointer hover:text-forest-800">
+                <input type="checkbox" id="filter-pioneer" class="rounded border-soil-300 text-forest-700 focus:ring-forest-500 h-4 w-4">
+                <span>Pioneer plant</span>
+              </label>
+              <p class="text-[11px] text-stone-400">Sparse data (~2-3% of species noted either way) -- absence doesn't necessarily mean "no".</p>
+            </fieldset>
+
             </div>
           </div>
         </aside>
@@ -259,15 +320,28 @@
         <div class="lg:col-span-9 space-y-4">
           <div class="flex flex-wrap items-center justify-between gap-3">
             <p class="text-sm text-stone-500" id="results-count" role="status" aria-live="polite">Showing 740 of 740 species</p>
-            <div class="flex items-center space-x-2">
-              <label for="sort-select" class="text-xs font-semibold text-stone-500 uppercase tracking-wider">Sort</label>
-              <select id="sort-select" onchange="applyFilters()" class="text-sm border border-soil-200 rounded-xl px-3 py-2 bg-white text-stone-700 focus:outline-none focus:ring-2 focus:ring-forest-500">
-                <option value="name">Common Name A&ndash;Z</option>
-                <option value="status">Native Status (best first)</option>
-                <option value="botanical">Botanical Name A&ndash;Z</option>
-                <option value="lepidoptera">Hosts Butterflies/Moths (highest first)</option>
-              </select>
+            <div class="flex items-center gap-3">
+              <button type="button" id="print-list-btn" onclick="printPlantList()" class="flex items-center gap-1.5 text-xs font-semibold text-forest-700 hover:text-forest-900 underline underline-offset-4 decoration-forest-300">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a1 1 0 001-1v-4H8v4a1 1 0 001 1zm8-12V5a1 1 0 00-1-1H8a1 1 0 00-1 1v4h10z"/>
+                </svg>
+                Print This List
+              </button>
+              <div class="flex items-center space-x-2">
+                <label for="sort-select" class="text-xs font-semibold text-stone-500 uppercase tracking-wider">Sort</label>
+                <select id="sort-select" onchange="applyFilters()" class="text-sm border border-soil-200 rounded-xl px-3 py-2 bg-white text-stone-700 focus:outline-none focus:ring-2 focus:ring-forest-500">
+                  <option value="name">Common Name A&ndash;Z</option>
+                  <option value="status">Native Status (best first)</option>
+                  <option value="botanical">Botanical Name A&ndash;Z</option>
+                  <option value="lepidoptera">Hosts Butterflies/Moths (highest first)</option>
+                </select>
+              </div>
             </div>
+          </div>
+
+          <div id="print-header">
+            <h2 style="font-size: 18px; font-weight: bold; margin-bottom: 2px;">CommonWild Native Plant Database</h2>
+            <p id="print-header-detail" style="font-size: 12px; color: #555;"></p>
           </div>
 
           <div id="plant-grid" class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4"></div>
@@ -308,6 +382,12 @@
       </div>
     </div>
   </div>
+
+  <button id="back-to-top-btn" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="hidden fixed bottom-6 right-6 z-40 p-3 bg-forest-800 hover:bg-forest-700 text-white rounded-full shadow-lg transition-all focus:outline-none focus:ring-2 focus:ring-forest-500 focus:ring-offset-2" aria-label="Back to top">
+    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"/>
+    </svg>
+  </button>
 
   <footer class="bg-soil-100 border-t border-soil-200 mt-auto">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-stone-500">
@@ -422,6 +502,8 @@
         bloom: new Set(),
         heightMin: null,
         heightMax: null,
+        leguminousOnly: false,
+        pioneerOnly: false,
         sort: 'name'
       };
 
@@ -455,6 +537,15 @@
       buildCheckboxGroup('filter-light', LIGHT_OPTIONS, state.light);
       buildCheckboxGroup('filter-moisture', MOISTURE_OPTIONS, state.moisture);
       buildCheckboxGroup('filter-bloom', BLOOM_OPTIONS, state.bloom);
+
+      document.getElementById('filter-leguminous').addEventListener('change', (e) => {
+        state.leguminousOnly = e.target.checked;
+        applyFilters();
+      });
+      document.getElementById('filter-pioneer').addEventListener('change', (e) => {
+        state.pioneerOnly = e.target.checked;
+        applyFilters();
+      });
 
       // Build cards
       const grid = document.getElementById('plant-grid');
@@ -535,6 +626,8 @@
           const pb = p.bloom || [];
           if (![...state.bloom].some((b) => pb.includes(b))) return false;
         }
+        if (state.leguminousOnly && !p.leguminous) return false;
+        if (state.pioneerOnly && !p.pioneer) return false;
         if (state.heightMin !== null || state.heightMax !== null) {
           if (typeof p.heightMinFt !== 'number' || typeof p.heightMaxFt !== 'number') return false;
           if (state.heightMin !== null && p.heightMinFt < state.heightMin) return false;
@@ -598,7 +691,8 @@
         grid.classList.toggle('hidden', ordered.length === 0);
 
         const activeFilterCount = state.category.size + state.status.size + state.light.size + state.moisture.size + state.bloom.size
-          + (state.heightMin !== null ? 1 : 0) + (state.heightMax !== null ? 1 : 0);
+          + (state.heightMin !== null ? 1 : 0) + (state.heightMax !== null ? 1 : 0)
+          + (state.leguminousOnly ? 1 : 0) + (state.pioneerOnly ? 1 : 0);
         const badge = document.getElementById('filters-active-badge');
         badge.textContent = activeFilterCount;
         badge.classList.toggle('hidden', activeFilterCount === 0);
@@ -643,6 +737,28 @@
         searchInput.focus();
       };
 
+      window.printPlantList = function () {
+        const parts = [];
+        if (state.query) parts.push(`search "${state.query}"`);
+        if (state.category.size) parts.push([...state.category].join(', '));
+        if (state.status.size) parts.push([...state.status].join('/') + ' native status');
+        if (state.light.size) parts.push([...state.light].join(', ') + ' light');
+        if (state.moisture.size) parts.push([...state.moisture].join(', ') + ' soil');
+        if (state.bloom.size) parts.push('blooms ' + [...state.bloom].join('/'));
+        if (state.heightMin !== null || state.heightMax !== null) {
+          parts.push(`height ${state.heightMin ?? '0'}–${state.heightMax ?? '∞'} ft`);
+        }
+        if (state.leguminousOnly) parts.push('leguminous');
+        if (state.pioneerOnly) parts.push('pioneer plant');
+
+        const visibleCount = document.querySelectorAll('.plant-card:not(.hidden)').length;
+        const filterSummary = parts.length ? ` &mdash; filtered by ${parts.join('; ')}` : '';
+        const dateStr = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+        document.getElementById('print-header-detail').innerHTML =
+          `${visibleCount} species${filterSummary} &middot; printed ${dateStr}`;
+        window.print();
+      };
+
       const heightMinInput = document.getElementById('height-min');
       const heightMaxInput = document.getElementById('height-max');
       let heightDebounceTimer;
@@ -668,14 +784,24 @@
         state.bloom.clear();
         state.heightMin = null;
         state.heightMax = null;
+        state.leguminousOnly = false;
+        state.pioneerOnly = false;
         searchInput.value = '';
         clearBtn.classList.add('hidden');
         heightMinInput.value = '';
         heightMaxInput.value = '';
         document.querySelectorAll('#filter-category input, #filter-status input, #filter-light input, #filter-moisture input, #filter-bloom input').forEach((el) => { el.checked = false; });
+        document.getElementById('filter-leguminous').checked = false;
+        document.getElementById('filter-pioneer').checked = false;
         document.getElementById('sort-select').value = 'name';
         applyFilters();
       };
+
+      // Back-to-top button: appears after scrolling past roughly one screen
+      const backToTopBtn = document.getElementById('back-to-top-btn');
+      window.addEventListener('scroll', () => {
+        backToTopBtn.classList.toggle('hidden', window.scrollY < 600);
+      }, { passive: true });
 
       // Read URL query param (?q=) for deep-linking / cross-page searches
       const urlParams = new URLSearchParams(window.location.search);
@@ -766,11 +892,27 @@
 
         const notesHtml = p.notes ? `<p class="text-sm text-stone-600 leading-relaxed whitespace-pre-line">${escapeHtml(p.notes)}</p>` : '';
 
+        const hasJargon = p.rarity || p.selection || p.ephemeral || p.leguminous || p.pioneer || p.erosionControl;
+        const glossaryHtml = hasJargon ? `
+          <details class="text-sm">
+            <summary class="text-forest-700 font-semibold cursor-pointer hover:text-forest-900 select-none">What do these terms mean?</summary>
+            <dl class="mt-3 space-y-2.5 text-stone-600 leading-relaxed">
+              <div><dt class="font-semibold text-stone-800 inline">Rarity (E/T/X/P/U):</dt> <dd class="inline">Ohio DNR conservation status &mdash; E = Endangered, T = Threatened, X = Presumed Extirpated (no longer found here), P = Potentially Threatened, U = Status Under Review.</dd></div>
+              <div><dt class="font-semibold text-stone-800 inline">r/K Selected:</dt> <dd class="inline">An ecological strategy. "r" means the plant reproduces quickly with many offspring and little investment in each, thriving in disturbed or unstable conditions. "K" means it reproduces slowly with fewer offspring, thriving in stable, established conditions.</dd></div>
+              <div><dt class="font-semibold text-stone-800 inline">Ephemeral:</dt> <dd class="inline">A spring ephemeral completes its above-ground growth, flowering, and seeding quickly in early spring, then goes dormant for the rest of the year &mdash; often timed to bloom before the tree canopy leafs out and shades the forest floor.</dd></div>
+              <div><dt class="font-semibold text-stone-800 inline">Leguminous:</dt> <dd class="inline">A member of the pea/bean family (Fabaceae). Many, but not all, legumes host bacteria that fix nitrogen from the air into the soil, improving fertility for themselves and neighboring plants.</dd></div>
+              <div><dt class="font-semibold text-stone-800 inline">Pioneer Plant:</dt> <dd class="inline">Among the first species to colonize bare or disturbed soil, helping stabilize it and build organic matter for later-arriving species.</dd></div>
+              <div><dt class="font-semibold text-stone-800 inline">Erosion Control:</dt> <dd class="inline">Whether the plant's root system or growth habit helps stabilize soil, e.g. on slopes or along waterways.</dd></div>
+            </dl>
+          </details>
+        ` : '';
+
         document.getElementById('plant-modal-body').innerHTML = [
           section('Overview', plantTypeTag + overviewStats),
           section('Growing Conditions', growing + growingStats),
           section('Ecology & Wildlife Value', ecologyStats),
           section('Availability', availStats),
+          glossaryHtml,
           section('Notes & Sources', notesHtml),
         ].filter(Boolean).join('<hr class="border-soil-200">');
 
