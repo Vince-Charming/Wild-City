@@ -265,6 +265,7 @@
                 <option value="name">Common Name A&ndash;Z</option>
                 <option value="status">Native Status (best first)</option>
                 <option value="botanical">Botanical Name A&ndash;Z</option>
+                <option value="lepidoptera">Hosts Butterflies/Moths (highest first)</option>
               </select>
             </div>
           </div>
@@ -542,6 +543,15 @@
         return true;
       }
 
+      // Lepidoptera counts in the source data are messy free text ("10?", "1 but may not
+      // occur in Ohio", "75 or 104 see nwf", "?"). Extract the first number found as a
+      // reasonable estimate; entries with no digit at all (just "?", or missing) are
+      // treated as unknown, not zero, and sort to the end.
+      function firstLepidopteraNumber(p) {
+        const m = (p.lepidopteraCount || '').match(/\d+/);
+        return m ? parseInt(m[0], 10) : null;
+      }
+
       function sortIndices(indices) {
         const sort = state.sort;
         return indices.slice().sort((a, b) => {
@@ -556,6 +566,12 @@
             if (!ba && bb) return 1;
             if (ba && !bb) return -1;
             if (ba !== bb) return ba.localeCompare(bb);
+          } else if (sort === 'lepidoptera') {
+            const la = firstLepidopteraNumber(pa);
+            const lb = firstLepidopteraNumber(pb);
+            if (la === null && lb !== null) return 1;
+            if (la !== null && lb === null) return -1;
+            if (la !== null && lb !== null && la !== lb) return lb - la;
           }
           return pa.name.localeCompare(pb.name);
         });
@@ -735,7 +751,6 @@
           statRow('Lepidoptera Notes', p.lepidopteraNotes),
           statRow('Specialist Pollinators', p.pollinators),
           statRow('Bird Interactions', p.birds),
-          statRow('Pollinator Value (Buzz Score)', typeof p.buzzScore === 'number' ? p.buzzScore + ' / 11' : ''),
           statRow('Showy Blooms', typeof p.showyBlooms === 'number' ? p.showyBlooms + ' / 10' : ''),
           statRow('Showy Foliage', typeof p.showyFoliage === 'number' ? p.showyFoliage + ' / 10' : ''),
           statRow('Fragrant', typeof p.fragrant === 'number' ? p.fragrant + ' / 3' : ''),
