@@ -196,11 +196,17 @@
         <aside class="lg:col-span-3 lg:sticky lg:top-28 lg:max-h-[calc(100vh-8rem)] flex flex-col">
           <div class="bg-white rounded-2xl border border-soil-200 shadow-sm p-5 flex flex-col min-h-0 flex-1">
             <div class="flex items-center justify-between shrink-0 pb-4 mb-2 border-b border-soil-100">
-              <h3 class="text-sm font-bold font-serif text-forest-900 uppercase tracking-wide">Filters</h3>
-              <button onclick="resetFilters()" class="text-xs font-semibold text-forest-700 hover:text-forest-900 underline underline-offset-4 decoration-forest-300">Reset</button>
+              <button type="button" id="filters-toggle-btn" aria-expanded="true" aria-controls="filters-body" class="flex items-center gap-2 text-sm font-bold font-serif text-forest-900 uppercase tracking-wide focus:outline-none focus:ring-2 focus:ring-forest-500 rounded-lg -m-1 p-1">
+                <span>Filters</span>
+                <span id="filters-active-badge" class="hidden text-[10px] font-sans font-bold normal-case tracking-normal bg-forest-800 text-white rounded-full px-2 py-0.5"></span>
+                <svg id="filters-chevron" class="w-4 h-4 text-stone-400 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                </svg>
+              </button>
+              <button onclick="resetFilters()" class="text-xs font-semibold text-forest-700 hover:text-forest-900 underline underline-offset-4 decoration-forest-300 shrink-0">Reset</button>
             </div>
 
-            <div class="space-y-6 overflow-y-auto pr-1 -mr-1">
+            <div id="filters-body" class="space-y-6 overflow-y-auto pr-1 -mr-1">
 
             <fieldset class="space-y-2">
               <legend class="text-[11px] font-bold uppercase tracking-wider text-stone-400 mb-2">Plant Type</legend>
@@ -574,8 +580,33 @@
         resultsCount.textContent = `Showing ${ordered.length} of ${PLANTS.length} species`;
         emptyState.classList.toggle('hidden', ordered.length !== 0);
         grid.classList.toggle('hidden', ordered.length === 0);
+
+        const activeFilterCount = state.category.size + state.status.size + state.light.size + state.moisture.size + state.bloom.size
+          + (state.heightMin !== null ? 1 : 0) + (state.heightMax !== null ? 1 : 0);
+        const badge = document.getElementById('filters-active-badge');
+        badge.textContent = activeFilterCount;
+        badge.classList.toggle('hidden', activeFilterCount === 0);
       }
       window.applyFilters = applyFilters;
+
+      // Collapsible filter panel: collapsed by default on mobile (where it would otherwise
+      // push all 740 results below a full screen or two of checkboxes), expanded by default
+      // on desktop (the sticky sidebar already scrolls independently and isn't blocking anything).
+      const filtersToggleBtn = document.getElementById('filters-toggle-btn');
+      const filtersBody = document.getElementById('filters-body');
+      const filtersChevron = document.getElementById('filters-chevron');
+      let filtersExpanded = window.matchMedia('(min-width: 1024px)').matches;
+
+      function updateFiltersVisibility() {
+        filtersBody.classList.toggle('hidden', !filtersExpanded);
+        filtersToggleBtn.setAttribute('aria-expanded', String(filtersExpanded));
+        filtersChevron.style.transform = filtersExpanded ? 'rotate(180deg)' : 'rotate(0deg)';
+      }
+      filtersToggleBtn.addEventListener('click', () => {
+        filtersExpanded = !filtersExpanded;
+        updateFiltersVisibility();
+      });
+      updateFiltersVisibility();
 
       const searchInput = document.getElementById('plant-search');
       const clearBtn = document.getElementById('clear-search-btn');
