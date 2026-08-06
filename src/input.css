@@ -38,3 +38,66 @@
   left: 1rem;
   top: 1rem;
 }
+
+/* Designer credit ("designed by VINCE.CHARMING") in the footer colophon bar.
+   Barlow / Barlow Condensed are loaded via the Google Fonts <link> in each
+   page head rather than an @import here -- a stylesheet @import cannot start
+   downloading until output.css itself has been fetched and parsed, and it
+   would also have to sit above the @tailwind directives to be valid CSS. */
+.vc-credit {
+  --vc-ink: #f2f2f3;               /* name colour */
+  --vc-dim: rgba(242, 242, 243, .5); /* "designed by" */
+  --vc-accent: #b5d9fd;            /* the dot + hover lift */
+
+  display: inline-flex;
+  align-items: baseline;
+  gap: 11px;
+  text-decoration: none;
+  font-family: "Barlow", system-ui, sans-serif;
+  font-size: 13px;
+  color: var(--vc-dim);
+}
+.vc-credit__by { white-space: nowrap; }
+.vc-credit__name {
+  font-family: "Barlow Condensed", system-ui, sans-serif;
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 1;
+  letter-spacing: .13em;
+  text-transform: uppercase;
+  color: var(--vc-ink);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.vc-credit__name span {
+  display: inline-block;
+  transition: transform .22s cubic-bezier(.2, .8, .2, 1), color .22s;
+}
+.vc-credit__name span:hover {
+  transform: translateY(-6px);
+  color: var(--vc-accent);
+}
+.vc-credit__dot { color: var(--vc-accent); }
+/* Qualified with .vc-credit__name so this outranks the rule above -- as a bare
+   .vc-credit__dot:hover it loses on specificity and the scale never applies. */
+.vc-credit__name span.vc-credit__dot:hover {
+  transform: translateY(-6px) scale(1.4);
+}
+
+.vc-credit:focus-visible {
+  outline: 2px solid var(--vc-accent);
+  outline-offset: 4px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .vc-credit__name span { transition: color .22s; }
+  .vc-credit__name span:hover,
+  .vc-credit__name span.vc-credit__dot:hover { transform: none; }
+}
+.vc-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
