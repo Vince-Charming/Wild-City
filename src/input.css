@@ -92,11 +92,10 @@
   outline: 2px solid var(--vc-accent);
   outline-offset: 4px;
 }
-@media (prefers-reduced-motion: reduce) {
-  .vc-credit__name span { transition: color .22s; }
-  .vc-credit__name span:hover,
-  .vc-credit__name span.vc-credit__dot:hover { transform: none; }
-}
+/* Deliberately not gated behind prefers-reduced-motion: this is a tiny 6px
+   decorative letter lift, not sweeping/looping motion, and the site owner
+   wants it to always play -- confirmed after finding their own Safari
+   reports prefers-reduced-motion: reduce even with the OS setting off. */
 .vc-sr {
   position: absolute;
   width: 1px;
