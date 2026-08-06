@@ -71,6 +71,10 @@
 }
 .vc-credit__name span {
   display: inline-block;
+  /* Safari/WebKit sometimes never composites a transform-on-:hover transition
+     for a plain inline-block box, so the lift silently no-ops. Promoting the
+     letter to its own layer ahead of time fixes it. */
+  will-change: transform;
   transition: transform .22s cubic-bezier(.2, .8, .2, 1), color .22s;
 }
 .vc-credit__name span:hover {
