@@ -108,6 +108,104 @@
       top: 1rem;
     }
 
+    /* Let the Sort drop-down shrink so the results bar never scrolls sideways on very narrow phones (320px) */
+    .results-tools, .sort-wrap { min-width: 0; max-width: 100%; }
+    #sort-select { min-width: 0; max-width: 100%; }
+
+    /* Plant photos: a small thumbnail beside the name on a card, larger photo(s) at the top of the pop-up */
+    .plant-head {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+    }
+    .plant-head h4 {
+      flex: 1 1 0%;
+      min-width: 0;
+    }
+    .plant-thumb {
+      width: 64px;
+      height: 64px;
+      flex-shrink: 0;
+      border-radius: 12px;
+      object-fit: cover;
+      background: #e5dbcd;
+    }
+    .plant-photos {
+      display: flex;
+      gap: .5rem;
+      /* fixed height so the pop-up doesn't jump while the photo loads */
+      height: clamp(240px, 50vh, 380px);
+      padding: .5rem;
+      border: 1px solid #e5dbcd;
+      border-radius: 12px;
+      background: #f4efe9;
+    }
+    .plant-photos img {
+      flex: 1 1 0%;
+      min-width: 0;
+      height: 100%;
+      object-fit: contain;
+      border-radius: 8px;
+    }
+
+    /* Click-to-copy botanical names (behaviour: the copy handler in the script below) */
+    .copy-hint {
+      display: inline-flex;
+      align-items: center;
+      gap: .375rem;
+    }
+    .copy-name {
+      cursor: copy;
+      text-decoration: underline dotted;
+      text-decoration-thickness: 1px;
+      text-decoration-color: rgba(120, 113, 108, .6);
+      text-underline-offset: 3px;
+      border-radius: 2px;
+    }
+    .copy-name:hover {
+      color: #2f523f;
+      text-decoration-color: currentColor;
+    }
+    /* On a card the name is a <span> inside the card's own button; padding on inline text
+       enlarges the hit area without changing the line height. */
+    span.copy-name { padding: 4px 0; }
+    /* In the detail pop-up it is a real, keyboard-focusable button */
+    button.copy-name {
+      display: inline-block;
+      padding: 4px 0;
+      margin: -4px 0;
+      border: 0;
+      background: none;
+      -webkit-appearance: none;
+      appearance: none;
+      font: inherit;
+      color: inherit;
+      text-align: inherit;
+    }
+    button.copy-name:focus-visible {
+      outline: 2px solid #498062;
+      outline-offset: 2px;
+    }
+    #plant-modal-botanical .copy-name:hover { color: #fff; }
+    #plant-modal-botanical button.copy-name:focus-visible { outline-color: #c5dbce; }
+    /* One shared "Copied" bubble, positioned over whichever name was clicked (no animation) */
+    .copy-bubble {
+      position: fixed;
+      z-index: 60;
+      padding: 4px 8px;
+      border-radius: 6px;
+      background: #1d3327;
+      color: #fff;
+      font: 600 11px/1 'Plus Jakarta Sans', system-ui, sans-serif;
+      white-space: nowrap;
+      pointer-events: none;
+    }
+    .copy-bubble.is-light {
+      background: #e1ede6;
+      color: #1d3327;
+    }
+    .copy-bubble[hidden] { display: none; }
+
     /* Print view: hide navigation/chrome, print just the current filtered/sorted
        results as a clean reference list. */
     #print-header {
@@ -153,6 +251,13 @@
       }
       .plant-card.hidden {
         display: none !important;
+      }
+      .plant-thumb, .plant-photos, .copy-hint, .copy-bubble {
+        display: none !important;
+      }
+      .copy-name {
+        text-decoration: none;
+        cursor: auto;
       }
     }
   </style>
@@ -221,6 +326,10 @@
         <h2 class="text-3xl md:text-4xl font-bold font-serif text-forest-900">Native Plant Database</h2>
         <p class="text-stone-600 text-sm leading-relaxed">
           Search and filter our full <a href="resources.html" class="text-forest-700 font-semibold underline underline-offset-4 decoration-forest-300 hover:decoration-forest-700 transition-colors">Native Plants Reference Sheet</a> &mdash; <span id="total-count-inline">740</span> species (trees, shrubs, vines, grasses &amp; sedges, forbs &amp; ferns, and aquatic plants) suited to the 45223 ecosystem, cross-referenced for their value to local pollinators, birds, and moths.
+        </p>
+        <p class="copy-hint text-xs text-stone-500">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+          <span>Tip: click or tap any botanical name to copy it.</span>
         </p>
       </div>
 
@@ -320,14 +429,14 @@
         <div class="lg:col-span-9 space-y-4">
           <div class="flex flex-wrap items-center justify-between gap-3">
             <p class="text-sm text-stone-500" id="results-count" role="status" aria-live="polite">Showing 740 of 740 species</p>
-            <div class="flex items-center gap-3">
+            <div class="results-tools flex flex-wrap items-center gap-3">
               <button type="button" id="print-list-btn" onclick="printPlantList()" class="flex items-center gap-1.5 text-xs font-semibold text-forest-700 hover:text-forest-900 underline underline-offset-4 decoration-forest-300">
                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a1 1 0 001-1v-4H8v4a1 1 0 001 1zm8-12V5a1 1 0 00-1-1H8a1 1 0 00-1 1v4h10z"/>
                 </svg>
                 Print This List
               </button>
-              <div class="flex items-center space-x-2">
+              <div class="sort-wrap flex items-center space-x-2">
                 <label for="sort-select" class="text-xs font-semibold text-stone-500 uppercase tracking-wider">Sort</label>
                 <select id="sort-select" onchange="applyFilters()" class="text-sm border border-soil-200 rounded-xl px-3 py-2 bg-white text-stone-700 focus:outline-none focus:ring-2 focus:ring-forest-500">
                   <option value="name">Common Name A&ndash;Z</option>
@@ -362,6 +471,9 @@
     </div>
 
   </main>
+
+  <div id="copy-status" class="sr-only" role="status" aria-live="polite"></div>
+  <div id="copy-bubble" class="copy-bubble" hidden></div>
 
   <!-- Plant Detail Modal -->
   <div id="plant-modal-backdrop" class="fixed inset-0 bg-stone-900/50 backdrop-blur-sm z-50 hidden items-center justify-center p-4 transition-all duration-300" role="dialog" aria-modal="true" aria-labelledby="plant-modal-title">
@@ -455,9 +567,42 @@
   </script>
 
   <script src="plant-data.js"></script>
+  <script src="plant-photos.js"></script>
   <script>
     (function () {
-      const PLANTS = window.NATIVE_PLANTS || [];
+      // --- Botanical names and photos ---
+      // The first (accepted) Latin name in a botanical-name string, exactly as written; null when the string
+      // doesn't start with one (e.g. "Stiff Gentian", or a capitalization typo like "Heliopsis Helianthoides").
+      function leadingLatinName(raw) {
+        const s = String(raw || '').replace(/^\s+/, '');
+        const m = s.match(/^([A-Z][a-z]+)(?: (?:[x×X]) ([a-z][a-z-]+)| ([a-z][a-z-]+))?(?: (?:var|ssp|subsp|f)\. [a-z][a-z-]+)?/);
+        if (!m) return null;
+        const lead = m[0];
+        const rest = s.slice(lead.length);
+        if (m[2] || m[3]) {
+          if (/^[a-z]/.test(rest)) return null;
+        } else if (rest && !/^\s*(?:[,;(]|[-–—](?:\s|$)|$)/.test(rest)) {
+          return null;
+        }
+        return lead;
+      }
+      const nameKey = (s) => String(s || '').toLowerCase().replace(/\s+/g, ' ').trim();
+
+      // plant-data.js is rebuilt nightly from the Google Sheet; photos come from plant-photos.js and are
+      // matched to plants by botanical name. Species that have a photo but aren't in the Sheet yet are shown
+      // as photo-only cards until the Sheet has them.
+      const DB_PLANTS = window.NATIVE_PLANTS || [];
+      const photoFiles = new Map();
+      (window.PLANT_PHOTOS || []).forEach((set) => set.names.forEach((n) => photoFiles.set(nameKey(n), set.files)));
+      const dbNames = new Set(DB_PLANTS.map((p) => nameKey(leadingLatinName(p.botanical))).filter(Boolean));
+      const photoOnlyPlants = (window.PLANT_PHOTO_ONLY || [])
+        .filter((e) => !dbNames.has(nameKey(e.botanical)))
+        .map((e) => Object.assign({ photoOnly: true }, e));
+      const PLANTS = DB_PLANTS.concat(photoOnlyPlants);
+      PLANTS.forEach((p) => {
+        const lead = leadingLatinName(p.botanical);
+        p.photos = (lead && photoFiles.get(nameKey(lead))) || [];
+      });
 
       const STATUS_ORDER = ['N1', 'N2', 'N3', 'N4', 'N5', ''];
       const STATUS_LABEL = {
@@ -595,12 +740,22 @@
           `;
         }
 
+        // Plants with a photo get a small square thumbnail beside the name; every other card is unchanged.
+        // The Latin name stays on its own full-width line either way, so it isn't squeezed next to the photo.
+        const titleRow = p.photos.length
+          ? `<div class="plant-head">
+               <img class="plant-thumb" src="plant-photos/thumb/${p.photos[0]}.webp" alt="" width="64" height="64" loading="lazy" decoding="async" onerror="this.remove()">
+               <h4 class="font-bold font-serif text-forest-900 leading-snug line-clamp-2">${escapeHtml(p.name)}</h4>
+               ${badge}
+             </div>`
+          : `<div class="flex items-start justify-between gap-2">
+               <h4 class="font-bold font-serif text-forest-900 leading-snug line-clamp-2">${escapeHtml(p.name)}</h4>
+               ${badge}
+             </div>`;
+
         card.innerHTML = `
-          <div class="flex items-start justify-between gap-2">
-            <h4 class="font-bold font-serif text-forest-900 leading-snug line-clamp-2">${escapeHtml(p.name)}</h4>
-            ${badge}
-          </div>
-          <p class="text-xs italic text-stone-500 font-mono line-clamp-1">${escapeHtml(p.botanical || '')}</p>
+          ${titleRow}
+          <p class="text-xs italic text-stone-500 font-mono line-clamp-1">${botanicalHtml(p.botanical, false)}</p>
           <div class="space-y-2.5 pt-2 border-t border-soil-100">
             ${bubbleRow('Plant Type', p.category ? [p.category] : [], CATEGORY_COLORS)}
             ${bubbleRow('Light Conditions', p.light || [], LIGHT_COLORS)}
@@ -845,12 +1000,135 @@
         return `<div class="space-y-2"><h5 class="text-xs font-bold uppercase tracking-wider text-forest-700">${escapeHtml(title)}</h5>${html}</div>`;
       }
 
+      // Botanical-name line: the first (accepted) Latin name becomes click-to-copy and any synonyms after it stay
+      // plain text. In the detail pop-up it is a real, keyboard-focusable button. On a card it is a <span> inside the
+      // card's own button (a card can't contain a second button), and the click handler below intercepts it.
+      function botanicalHtml(raw, asButton) {
+        const text = String(raw || '');
+        const lead = leadingLatinName(text);
+        if (!lead) return escapeHtml(text);
+        const at = text.indexOf(lead);
+        const name = escapeHtml(lead);
+        const el = asButton
+          ? `<button type="button" class="copy-name" data-copy="${name}" aria-label="Copy ${name} to clipboard" title="Click to copy">${name}</button>`
+          : `<span class="copy-name" data-copy="${name}" title="Click to copy">${name}</span>`;
+        return escapeHtml(text.slice(0, at)) + el + escapeHtml(text.slice(at + lead.length));
+      }
+
+      // Photo(s) at the top of the detail pop-up; two photos of one plant sit side by side.
+      function photoBlock(p) {
+        if (!p.photos || !p.photos.length) return '';
+        const lead = leadingLatinName(p.botanical);
+        const label = p.name + (lead ? ' (' + lead + ')' : '');
+        const imgs = p.photos.map((f, i) => {
+          const alt = p.photos.length > 1 ? `Photo ${i + 1} of ${p.photos.length}: ${label}` : `Photo of ${label}`;
+          return `<img src="plant-photos/large/${f}.webp" srcset="plant-photos/medium/${f}.webp 800w, plant-photos/large/${f}.webp 1200w" sizes="(min-width: 700px) 600px, 90vw" alt="${escapeHtml(alt)}" decoding="async" onerror="this.remove()">`;
+        }).join('');
+        return `<div class="plant-photos">${imgs}</div>`;
+      }
+
+      // --- Click-to-copy for botanical names ---
+      async function writeToClipboard(text) {
+        if (navigator.clipboard && window.isSecureContext) {
+          try {
+            await navigator.clipboard.writeText(text);
+            return true;
+          } catch (err) { /* fall through to the legacy path */ }
+        }
+        // Legacy path (older browsers / non-HTTPS): copy from a temporary off-screen textarea
+        const previouslyFocused = document.activeElement;
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.setAttribute('readonly', '');
+        ta.style.cssText = 'position:fixed;top:0;left:0;opacity:0;pointer-events:none';
+        document.body.appendChild(ta);
+        ta.focus();
+        ta.select();
+        ta.setSelectionRange(0, text.length);
+        let ok = false;
+        try { ok = document.execCommand('copy'); } catch (err) { ok = false; }
+        ta.remove();
+        if (previouslyFocused && previouslyFocused.focus) previouslyFocused.focus();
+        return ok;
+      }
+
+      const copyBubble = document.getElementById('copy-bubble');
+      const copyStatus = document.getElementById('copy-status');
+      let copyBubbleTimer;
+
+      function hideCopyBubble() {
+        clearTimeout(copyBubbleTimer);
+        copyBubble.hidden = true;
+      }
+
+      // One shared bubble, placed over the clicked name (below it inside the dark pop-up header, where
+      // "above" would cover the plant's name).
+      function showCopyBubble(el, message) {
+        clearTimeout(copyBubbleTimer);
+        const inHeader = !!el.closest('#plant-modal-botanical');
+        copyBubble.textContent = message;
+        copyBubble.classList.toggle('is-light', inHeader);
+        copyBubble.style.visibility = 'hidden';
+        copyBubble.hidden = false;
+        const r = el.getBoundingClientRect();
+        const w = copyBubble.offsetWidth;
+        const h = copyBubble.offsetHeight;
+        const left = Math.min(Math.max(r.left + r.width / 2 - w / 2, 8), window.innerWidth - w - 8);
+        let top = inHeader ? r.bottom + 6 : r.top - h - 6;
+        if (top < 8) top = r.bottom + 6;
+        copyBubble.style.left = left + 'px';
+        copyBubble.style.top = top + 'px';
+        copyBubble.style.visibility = 'visible';
+        copyBubbleTimer = setTimeout(hideCopyBubble, 1800);
+      }
+
+      function announceCopy(message) {
+        copyStatus.textContent = '';
+        setTimeout(() => { copyStatus.textContent = message; }, 50);
+      }
+
+      // The copy target for a click: the name itself, or (for browsers that report a card's <button> as the target of
+      // a click on its child) the name under the pointer. Keyboard "clicks" have no coordinates and open the card.
+      function copyTargetOf(e) {
+        const t = e.target;
+        if (!t || !t.closest) return null;
+        const direct = t.closest('.copy-name');
+        if (direct) return direct;
+        if (e.clientX || e.clientY) {
+          const hit = document.elementFromPoint(e.clientX, e.clientY);
+          const name = hit && hit.closest ? hit.closest('.copy-name') : null;
+          if (name && t.contains(name)) return name;
+        }
+        return null;
+      }
+
+      // Capture phase on purpose: it runs before the card's own click handler, which would open the pop-up
+      document.addEventListener('click', async (e) => {
+        const el = copyTargetOf(e);
+        if (!el) return;
+        e.preventDefault();
+        e.stopPropagation();
+        const text = el.getAttribute('data-copy');
+        const ok = await writeToClipboard(text);
+        showCopyBubble(el, ok ? 'Copied' : 'Couldn’t copy');
+        if (!ok) {
+          // Last resort: select the name so the visitor can press Cmd/Ctrl+C themselves
+          const range = document.createRange();
+          range.selectNodeContents(el);
+          const sel = window.getSelection();
+          sel.removeAllRanges();
+          sel.addRange(range);
+        }
+        announceCopy(ok ? 'Copied ' + text + ' to clipboard' : 'Could not copy ' + text);
+      }, true);
+      window.addEventListener('scroll', hideCopyBubble, { passive: true, capture: true });
+
       window.openPlantModal = function (idx) {
         const p = PLANTS[idx];
         lastFocusedBeforePlantModal = document.activeElement;
 
         document.getElementById('plant-modal-title').textContent = p.name;
-        document.getElementById('plant-modal-botanical').textContent = p.botanical || '';
+        document.getElementById('plant-modal-botanical').innerHTML = botanicalHtml(p.botanical, true);
 
         const statusKey = p.status || '';
         const plantTypeTag = p.category ? tagList([p.category], CATEGORY_COLORS) : '';
@@ -917,7 +1195,12 @@
           </details>
         ` : '';
 
+        const photoOnlyNote = p.photoOnly
+          ? `<p class="text-sm text-stone-500 bg-soil-100 border border-soil-200 rounded-xl px-4 py-3">We have a photo of this species but haven&rsquo;t added its full growing details to the reference sheet yet.</p>`
+          : '';
+
         document.getElementById('plant-modal-body').innerHTML = [
+          (photoBlock(p) || photoOnlyNote) ? `<div class="space-y-3">${photoBlock(p)}${photoOnlyNote}</div>` : '',
           section('Overview', plantTypeTag + overviewStats),
           section('Growing Conditions', growing + growingStats),
           section('Ecology & Wildlife Value', ecologyStats),
