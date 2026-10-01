@@ -123,6 +123,72 @@
       left: 1rem;
       top: 1rem;
     }
+
+    /* Click-to-copy botanical names (behaviour: copy handler in the script at the bottom) */
+    .copy-hint {
+      display: inline-flex;
+      align-items: center;
+      gap: .375rem;
+    }
+    .copy-name {
+      position: relative;
+      display: inline-block;
+      /* +/-4px gives a taller tap target without changing the line height */
+      padding: 4px 0;
+      margin: -4px 0;
+      border: 0;
+      background: none;
+      -webkit-appearance: none;
+      appearance: none;
+      font: inherit;
+      color: inherit;
+      text-align: inherit;
+      cursor: copy;
+      text-decoration: underline dotted;
+      text-decoration-thickness: 1px;
+      text-decoration-color: rgba(120, 113, 108, .6);
+      text-underline-offset: 3px;
+      border-radius: 2px;
+    }
+    .copy-name:hover {
+      color: #2f523f;
+      text-decoration-color: currentColor;
+    }
+    .copy-name:focus-visible {
+      outline: 2px solid #498062;
+      outline-offset: 2px;
+    }
+    /* "Copied" bubble: absolutely positioned so nothing reflows, and no animation */
+    .copy-name[data-state]::after {
+      position: absolute;
+      left: 50%;
+      bottom: calc(100% + 2px);
+      transform: translateX(-50%);
+      padding: 4px 8px;
+      border-radius: 6px;
+      background: #1d3327;
+      color: #fff;
+      font-size: 11px;
+      font-style: normal;
+      font-weight: 600;
+      line-height: 1;
+      white-space: nowrap;
+      text-decoration: none;
+      pointer-events: none;
+      z-index: 5;
+    }
+    .copy-name[data-state="copied"]::after { content: "Copied"; }
+    .copy-name[data-state="failed"]::after { content: "Couldn\2019t copy"; }
+    /* Same buttons inside the dark enlarged-photo caption */
+    #lightbox-subcaption .copy-name:hover { color: #fff; }
+    #lightbox-subcaption .copy-name:focus-visible { outline-color: #c5dbce; }
+    /* ...with the bubble below the name, so it doesn't cover the caption title above it */
+    #lightbox-subcaption .copy-name[data-state]::after {
+      bottom: auto;
+      top: calc(100% + 2px);
+      background: #e1ede6;
+      color: #1d3327;
+    }
   </style>
 </head>
 <body class="bg-soil-50 text-stone-800 font-sans min-h-screen flex flex-col antialiased selection:bg-forest-100 selection:text-forest-900">
@@ -186,12 +252,17 @@
       <span class="w-2 h-2 rounded-full bg-amber-400" aria-hidden="true"></span>
       <span id="toast-text" class="text-sm font-medium">Ready.</span>
     </div>
+    <div id="copy-status" class="sr-only" role="status" aria-live="polite"></div>
 
     <div class="space-y-12">
       <div class="text-center max-w-2xl mx-auto space-y-4">
         <span class="text-xs text-forest-700 font-bold uppercase tracking-wider bg-forest-100 px-3 py-1 rounded-full">CommonWild Portfolio</span>
         <h2 class="text-3xl md:text-4xl font-bold font-serif text-forest-900">Neighborhood Gallery</h2>
         <p class="text-stone-600">See the plants we've grown in the landscape throughout Northside</p>
+        <p class="copy-hint text-xs text-stone-500">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+          <span>Tip: click or tap any botanical name to copy it.</span>
+        </p>
       </div>
 
       <div class="flex flex-wrap items-center justify-center gap-2">
@@ -212,7 +283,7 @@
               <span class="text-xs text-stone-500">Northside</span>
             </div>
             <h4 class="font-bold font-serif text-lg text-stone-900">Wild Red Columbine</h4>
-            <p class="text-xs text-stone-500 italic">Aquilegia canadensis</p>
+            <p class="text-xs text-stone-500 italic"><button type="button" class="copy-name">Aquilegia canadensis</button></p>
           </div>
         </div>
 
@@ -225,7 +296,7 @@
               <span class="text-xs text-stone-500">Northside</span>
             </div>
             <h4 class="font-bold font-serif text-lg text-stone-900">Red Admiral on Purple Coneflower</h4>
-            <p class="text-xs text-stone-500 italic">Vanessa atalanta on Echinacea purpurea</p>
+            <p class="text-xs text-stone-500 italic"><button type="button" class="copy-name">Vanessa atalanta</button> on <button type="button" class="copy-name">Echinacea purpurea</button></p>
           </div>
         </div>
 
@@ -238,7 +309,7 @@
               <span class="text-xs text-stone-500">Northside</span>
             </div>
             <h4 class="font-bold font-serif text-lg text-stone-900">Prairie Rose Bloom Close-Up</h4>
-            <p class="text-xs text-stone-500 italic">Rosa setigera</p>
+            <p class="text-xs text-stone-500 italic"><button type="button" class="copy-name">Rosa setigera</button></p>
           </div>
         </div>
 
@@ -251,7 +322,7 @@
               <span class="text-xs text-stone-500">Northside</span>
             </div>
             <h4 class="font-bold font-serif text-lg text-stone-900">Cardinal Flower</h4>
-            <p class="text-xs text-stone-500 italic">Lobelia cardinalis</p>
+            <p class="text-xs text-stone-500 italic"><button type="button" class="copy-name">Lobelia cardinalis</button></p>
           </div>
         </div>
 
@@ -264,7 +335,7 @@
               <span class="text-xs text-stone-500">Northside</span>
             </div>
             <h4 class="font-bold font-serif text-lg text-stone-900">Purple Passionflower</h4>
-            <p class="text-xs text-stone-500 italic">Passiflora incarnata</p>
+            <p class="text-xs text-stone-500 italic"><button type="button" class="copy-name">Passiflora incarnata</button></p>
           </div>
         </div>
 
@@ -277,7 +348,7 @@
               <span class="text-xs text-stone-500">Northside</span>
             </div>
             <h4 class="font-bold font-serif text-lg text-stone-900">Garden with Bee Balm &amp; Self Heal</h4>
-            <p class="text-xs text-stone-500 italic">Monarda didyma &amp; Prunella vulgaris</p>
+            <p class="text-xs text-stone-500 italic"><button type="button" class="copy-name">Monarda didyma</button> &amp; <button type="button" class="copy-name">Prunella vulgaris</button></p>
           </div>
         </div>
 
@@ -290,7 +361,7 @@
               <span class="text-xs text-stone-500">Northside</span>
             </div>
             <h4 class="font-bold font-serif text-lg text-stone-900">Royal Catchfly</h4>
-            <p class="text-xs text-stone-500 italic">Silene regia</p>
+            <p class="text-xs text-stone-500 italic"><button type="button" class="copy-name">Silene regia</button></p>
           </div>
         </div>
 
@@ -316,7 +387,7 @@
               <span class="text-xs text-stone-500">Northside</span>
             </div>
             <h4 class="font-bold font-serif text-lg text-stone-900">Stiff Goldenrod</h4>
-            <p class="text-xs text-stone-500 italic">Solidago rigida</p>
+            <p class="text-xs text-stone-500 italic"><button type="button" class="copy-name">Solidago rigida</button></p>
           </div>
         </div>
 
@@ -329,7 +400,7 @@
               <span class="text-xs text-stone-500">Northside</span>
             </div>
             <h4 class="font-bold font-serif text-lg text-stone-900">Spiderwort &amp; Golden Alexanders</h4>
-            <p class="text-xs text-stone-500 italic">Tradescantia ohiensis &amp; Zizia aurea</p>
+            <p class="text-xs text-stone-500 italic"><button type="button" class="copy-name">Tradescantia ohiensis</button> &amp; <button type="button" class="copy-name">Zizia aurea</button></p>
           </div>
         </div>
 
@@ -342,7 +413,7 @@
               <span class="text-xs text-stone-500">Northside</span>
             </div>
             <h4 class="font-bold font-serif text-lg text-stone-900">Evening Primrose &amp; Bee Balm</h4>
-            <p class="text-xs text-stone-500 italic">Oenothera biennis &amp; Monarda fistulosa</p>
+            <p class="text-xs text-stone-500 italic"><button type="button" class="copy-name">Oenothera biennis</button> &amp; <button type="button" class="copy-name">Monarda fistulosa</button></p>
           </div>
         </div>
 
@@ -355,7 +426,7 @@
               <span class="text-xs text-stone-500">Northside</span>
             </div>
             <h4 class="font-bold font-serif text-lg text-stone-900">Red Trillium</h4>
-            <p class="text-xs text-stone-500 italic">Trillium erectum</p>
+            <p class="text-xs text-stone-500 italic"><button type="button" class="copy-name">Trillium erectum</button></p>
           </div>
         </div>
 
@@ -381,7 +452,7 @@
               <span class="text-xs text-stone-500">Northside</span>
             </div>
             <h4 class="font-bold font-serif text-lg text-stone-900">Pipevine Swallowtail on Bee Balm</h4>
-            <p class="text-xs text-stone-500 italic">Battus philenor on Monarda fistulosa</p>
+            <p class="text-xs text-stone-500 italic"><button type="button" class="copy-name">Battus philenor</button> on <button type="button" class="copy-name">Monarda fistulosa</button></p>
           </div>
         </div>
 
@@ -394,7 +465,7 @@
               <span class="text-xs text-stone-500">Northside</span>
             </div>
             <h4 class="font-bold font-serif text-lg text-stone-900">Penstemon &amp; Elderberry</h4>
-            <p class="text-xs text-stone-500 italic">Penstemon calycosus &amp; Sambucus canadensis</p>
+            <p class="text-xs text-stone-500 italic"><button type="button" class="copy-name">Penstemon calycosus</button> &amp; <button type="button" class="copy-name">Sambucus canadensis</button></p>
           </div>
         </div>
 
@@ -407,7 +478,7 @@
               <span class="text-xs text-stone-500">Northside</span>
             </div>
             <h4 class="font-bold font-serif text-lg text-stone-900">Dry Slope Garden</h4>
-            <p class="text-xs text-stone-500 italic">Liatris aspera &amp; Monarda punctata</p>
+            <p class="text-xs text-stone-500 italic"><button type="button" class="copy-name">Liatris aspera</button> &amp; <button type="button" class="copy-name">Monarda punctata</button></p>
           </div>
         </div>
 
@@ -420,7 +491,7 @@
               <span class="text-xs text-stone-500">Northside</span>
             </div>
             <h4 class="font-bold font-serif text-lg text-stone-900">Michigan Lily</h4>
-            <p class="text-xs text-stone-500 italic">Lilium michiganense</p>
+            <p class="text-xs text-stone-500 italic"><button type="button" class="copy-name">Lilium michiganense</button></p>
           </div>
         </div>
 
@@ -433,7 +504,7 @@
               <span class="text-xs text-stone-500">Northside</span>
             </div>
             <h4 class="font-bold font-serif text-lg text-stone-900">Monarch Caterpillar</h4>
-            <p class="text-xs text-stone-500 italic">Danaus plexippus on Asclepias</p>
+            <p class="text-xs text-stone-500 italic"><button type="button" class="copy-name">Danaus plexippus</button> on <button type="button" class="copy-name">Asclepias</button></p>
           </div>
         </div>
 
@@ -446,7 +517,7 @@
               <span class="text-xs text-stone-500">Northside</span>
             </div>
             <h4 class="font-bold font-serif text-lg text-stone-900">Monarch on Butterfly Milkweed</h4>
-            <p class="text-xs text-stone-500 italic">Danaus plexippus on Asclepias tuberosa</p>
+            <p class="text-xs text-stone-500 italic"><button type="button" class="copy-name">Danaus plexippus</button> on <button type="button" class="copy-name">Asclepias tuberosa</button></p>
           </div>
         </div>
 
@@ -472,7 +543,7 @@
               <span class="text-xs text-stone-500">Northside</span>
             </div>
             <h4 class="font-bold font-serif text-lg text-stone-900">Yard Habitat</h4>
-            <p class="text-xs text-stone-500 italic">Asclepias tuberosa &amp; Chamaecrista fasciculata</p>
+            <p class="text-xs text-stone-500 italic"><button type="button" class="copy-name">Asclepias tuberosa</button> &amp; <button type="button" class="copy-name">Chamaecrista fasciculata</button></p>
           </div>
         </div>
 
@@ -485,7 +556,7 @@
               <span class="text-xs text-stone-500">Northside</span>
             </div>
             <h4 class="font-bold font-serif text-lg text-stone-900">Krigia, Stonecrop &amp; Columbine</h4>
-            <p class="text-xs text-stone-500 italic">Krigia biflora, Sedum ternatum &amp; Aquilegia canadensis</p>
+            <p class="text-xs text-stone-500 italic"><button type="button" class="copy-name">Krigia biflora</button>, <button type="button" class="copy-name">Sedum ternatum</button> &amp; <button type="button" class="copy-name">Aquilegia canadensis</button></p>
           </div>
         </div>
 
@@ -498,7 +569,7 @@
               <span class="text-xs text-stone-500">Northside</span>
             </div>
             <h4 class="font-bold font-serif text-lg text-stone-900">Field Thistle &amp; Hummingbird Moth</h4>
-            <p class="text-xs text-stone-500 italic">Cirsium discolor &amp; Hemaris thysbe</p>
+            <p class="text-xs text-stone-500 italic"><button type="button" class="copy-name">Cirsium discolor</button> &amp; <button type="button" class="copy-name">Hemaris thysbe</button></p>
           </div>
         </div>
 
@@ -511,7 +582,7 @@
               <span class="text-xs text-stone-500">Northside</span>
             </div>
             <h4 class="font-bold font-serif text-lg text-stone-900">Lanceleaf Coreopsis</h4>
-            <p class="text-xs text-stone-500 italic">Coreopsis lanceolata</p>
+            <p class="text-xs text-stone-500 italic"><button type="button" class="copy-name">Coreopsis lanceolata</button></p>
           </div>
         </div>
 
@@ -524,7 +595,7 @@
               <span class="text-xs text-stone-500">Northside</span>
             </div>
             <h4 class="font-bold font-serif text-lg text-stone-900">Cardinal flower &amp; False Sunflower</h4>
-            <p class="text-xs text-stone-500 italic">Lobelia cardinalis &amp; Heliopsis helianthoides</p>
+            <p class="text-xs text-stone-500 italic"><button type="button" class="copy-name">Lobelia cardinalis</button> &amp; <button type="button" class="copy-name">Heliopsis helianthoides</button></p>
           </div>
         </div>
 
@@ -537,7 +608,7 @@
               <span class="text-xs text-stone-500">Northside</span>
             </div>
             <h4 class="font-bold font-serif text-lg text-stone-900">Prairie Climbing Rose</h4>
-            <p class="text-xs text-stone-500 italic">Rosa setigera</p>
+            <p class="text-xs text-stone-500 italic"><button type="button" class="copy-name">Rosa setigera</button></p>
           </div>
         </div>
 
@@ -550,7 +621,7 @@
               <span class="text-xs text-stone-500">Northside</span>
             </div>
             <h4 class="font-bold font-serif text-lg text-stone-900">Cardinal Flower &amp; Pickerelweed</h4>
-            <p class="text-xs text-stone-500 italic">Lobelia cardinalis Pontederia cordata</p>
+            <p class="text-xs text-stone-500 italic"><button type="button" class="copy-name">Lobelia cardinalis</button> &amp; <button type="button" class="copy-name">Pontederia cordata</button></p>
           </div>
         </div>
 
@@ -703,6 +774,66 @@
       }, 3000);
     }
 
+    // Click-to-copy for botanical names: the .copy-name buttons on each card and in the enlarged-photo caption.
+    // Copies exactly the text of the clicked name, so the spelling is never retyped by hand.
+    function enhanceCopyButtons(root) {
+      root.querySelectorAll('.copy-name').forEach(btn => {
+        btn.setAttribute('aria-label', 'Copy ' + btn.textContent.trim() + ' to clipboard');
+        btn.title = 'Click to copy';
+      });
+    }
+
+    async function writeToClipboard(text) {
+      if (navigator.clipboard && window.isSecureContext) {
+        try {
+          await navigator.clipboard.writeText(text);
+          return true;
+        } catch (err) { /* fall through to the legacy path */ }
+      }
+      // Legacy path (older browsers / non-HTTPS): copy from a temporary off-screen textarea
+      const previouslyFocused = document.activeElement;
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.setAttribute('readonly', '');
+      ta.style.cssText = 'position:fixed;top:0;left:0;opacity:0;pointer-events:none';
+      document.body.appendChild(ta);
+      ta.focus();
+      ta.select();
+      ta.setSelectionRange(0, text.length);
+      let ok = false;
+      try { ok = document.execCommand('copy'); } catch (err) { ok = false; }
+      ta.remove();
+      if (previouslyFocused && previouslyFocused.focus) previouslyFocused.focus();
+      return ok;
+    }
+
+    function announceCopy(message) {
+      const live = document.getElementById('copy-status');
+      if (!live) return;
+      live.textContent = '';
+      setTimeout(() => { live.textContent = message; }, 50);
+    }
+
+    // Capture phase on purpose: the enlarged-photo caption sits inside a wrapper that calls stopPropagation()
+    document.addEventListener('click', async (e) => {
+      const btn = e.target.closest('.copy-name');
+      if (!btn) return;
+      const text = btn.textContent.trim().replace(/\s+/g, ' ');
+      const ok = await writeToClipboard(text);
+      clearTimeout(btn._copyTimer);
+      btn.dataset.state = ok ? 'copied' : 'failed';
+      if (!ok) {
+        // Last resort: select the name so the visitor can press Cmd/Ctrl+C themselves
+        const range = document.createRange();
+        range.selectNodeContents(btn);
+        const sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(range);
+      }
+      btn._copyTimer = setTimeout(() => { delete btn.dataset.state; }, 1800);
+      announceCopy(ok ? 'Copied ' + text + ' to clipboard' : 'Could not copy ' + text);
+    }, true);
+
     // Lightbox (focus-managed + keyboard operable triggers)
     let lastFocusedBeforeLightbox = null;
     function openLightbox(imgElement) {
@@ -718,11 +849,18 @@
       const card = imgElement.closest('.gallery-card, .group\\/item');
       if (card) {
         const title = card.querySelector('h4') ? card.querySelector('h4').textContent : '';
-        const scientific = card.querySelector('.italic') ? card.querySelector('.italic').textContent : '';
+        const scientificEl = card.querySelector('.italic');
         const plate = card.querySelector('.font-mono') ? card.querySelector('.font-mono').textContent : '';
 
         caption.innerHTML = `${plate ? `<span class="text-amber-400 font-mono text-xs mr-2 font-bold">${plate}</span>` : ''}${title}`;
-        subcaption.textContent = scientific;
+        if (scientificEl && scientificEl.querySelector('.copy-name')) {
+          // Reuse the card's own markup (trusted, static) so the names stay click-to-copy in the viewer too
+          subcaption.innerHTML = scientificEl.innerHTML;
+          subcaption.querySelectorAll('[data-state]').forEach(el => el.removeAttribute('data-state'));
+          enhanceCopyButtons(subcaption);
+        } else {
+          subcaption.textContent = scientificEl ? scientificEl.textContent : '';
+        }
       } else {
         caption.textContent = imgElement.alt;
         subcaption.textContent = '';
@@ -775,6 +913,7 @@
       };
 
       attachGalleryListeners();
+      enhanceCopyButtons(document);
 
       document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') closeLightbox();
