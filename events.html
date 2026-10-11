@@ -78,7 +78,7 @@
   <link rel="icon" type="image/png" sizes="512x512" href="android-chrome-512x512.png">
   <meta name="theme-color" content="#1d3327">
 
-  <link rel="stylesheet" href="dist/output.css">
+  <link rel="stylesheet" href="dist/output.css?v=8ca8a7d6">
   
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -198,11 +198,7 @@
         <div id="upcoming-events" class="space-y-4"></div>
       </section>
 
-      <section aria-labelledby="friends-heading" class="space-y-6">
-        <div class="border-t border-soil-200 pt-10 space-y-2">
-          <h2 id="friends-heading" class="text-2xl md:text-3xl font-bold font-serif text-forest-900">Friends of CommonWild</h2>
-          <p class="text-stone-600 text-sm">Neighboring groups caring for green space around Northside and the Mill Creek.</p>
-        </div>
+      <section aria-label="Friends of CommonWild" class="border-t border-soil-200 pt-10">
         <ul id="friends-list" class="grid grid-cols-1 sm:grid-cols-3 gap-4"></ul>
       </section>
 
@@ -330,13 +326,21 @@
     });
 
   </script>
-  <script src="events-data.js"></script>
+  <script src="events-data.js?v=7e879521"></script>
   <script>
     // --- Events page: renders events-data.js, handles sign-ups ---
     (function () {
       const EVENTS = window.COMMONWILD_EVENTS || [];
       const HOSTS = window.COMMONWILD_HOSTS || {};
       const FRIENDS = ['millcreek', 'northside', 'langland'];   // display order of the partner groups
+      // Each group's color: solid on its Friends card, as the accent on its event cards
+      const HOST_STYLE = {
+        commonwild: { bg: 'bg-forest-900', text: 'text-forest-700', border: 'border-l-forest-800' },
+        millcreek: { bg: 'bg-[#1f4e6b]', text: 'text-[#1f4e6b]', border: 'border-l-[#1f4e6b]' },   // creek blue
+        northside: { bg: 'bg-[#4f6b2a]', text: 'text-[#4f6b2a]', border: 'border-l-[#4f6b2a]' },   // moss green
+        langland: { bg: 'bg-[#8a4b2a]', text: 'text-[#8a4b2a]', border: 'border-l-[#8a4b2a]' }     // rust
+      };
+      const styleOf = (key) => HOST_STYLE[key] || HOST_STYLE.commonwild;
       // Web3Forms access key (bound to adam@commonwildcincy.org); sign-ups are emailed there
       const SIGNUP_KEY = '1598dd0e-e7fd-4815-846f-799ac0abdfcf';
 
@@ -359,18 +363,20 @@
       function mapsUrl(place) {
         return 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(/cincinnati/i.test(place) ? place : place + ', Cincinnati, OH');
       }
-      // Logos are white-on-transparent, so they sit on a dark green badge
-      function logoBadge(h, size) {
-        return h.logo ? `<span class="shrink-0 inline-flex items-center justify-center rounded-lg bg-forest-900 ${size === 'lg' ? 'px-3 py-2' : 'px-2 py-1'}"><img src="${esc(h.logo)}" alt="${esc(h.name)} logo" class="${size === 'lg' ? 'h-10' : 'h-6'} w-auto"></span>` : '';
+      // Logos are white-on-transparent, so they sit on a badge in the group's color
+      function logoBadge(key) {
+        const h = HOSTS[key] || {};
+        return h.logo ? `<span class="shrink-0 inline-flex items-center justify-center rounded-lg ${styleOf(key).bg} px-2 py-1"><img src="${esc(h.logo)}" alt="${esc(h.name)} logo" class="h-6 w-auto"></span>` : '';
       }
-      function websiteLink(h, label) {
-        return h.url ? `<a href="${esc(h.url)}" target="_blank" rel="noopener" class="underline underline-offset-4 decoration-forest-300 hover:text-forest-900 hover:decoration-forest-700">${label}<span class="sr-only"> (opens in a new tab)</span></a>` : label;
+      function websiteLink(h, label, cls) {
+        return h.url ? `<a href="${esc(h.url)}" target="_blank" rel="noopener" class="underline underline-offset-4 ${cls || 'hover:opacity-75'}">${label}<span class="sr-only"> (opens in a new tab)</span></a>` : label;
       }
 
       function eventCard(e) {
         const s = parse(e.start);
         const month = s.toLocaleDateString('en-US', { month: 'short' });
         const host = HOSTS[e.host] || { name: e.host };
+        const st = styleOf(e.host);
         const details = e.details && e.details.length
           ? `<div class="text-sm text-stone-600"><p class="font-semibold text-stone-800">${esc(e.detailsHeading || 'Details')}</p>
                <ul class="list-disc pl-5 mt-1 space-y-0.5">${e.details.map((d) => `<li>${esc(d)}</li>`).join('')}</ul></div>`
@@ -382,14 +388,14 @@
              </a>`
           : '';
         return `
-          <article id="${esc(e.id)}" class="scroll-mt-28 bg-white rounded-2xl border border-soil-200 shadow-sm p-5 md:p-6 flex flex-col md:flex-row gap-5">
+          <article id="${esc(e.id)}" class="scroll-mt-28 bg-white rounded-2xl border border-soil-200 border-l-4 ${st.border} shadow-sm p-5 md:p-6 flex flex-col md:flex-row gap-5">
             <div class="flex gap-4 flex-1 min-w-0">
               <div class="shrink-0 w-16 text-center rounded-xl bg-forest-900 text-white py-2 self-start" aria-hidden="true">
                 <div class="text-xs font-bold uppercase tracking-wider text-forest-200">${esc(month)}</div>
                 <div class="text-2xl font-bold font-serif leading-none mt-1">${s.getDate()}</div>
               </div>
               <div class="space-y-2 min-w-0">
-                <p class="flex flex-wrap items-center gap-2 text-xs font-semibold uppercase tracking-wider text-forest-700">${logoBadge(host, 'sm')}
+                <p class="flex flex-wrap items-center gap-2 text-xs font-semibold uppercase tracking-wider ${st.text}">${logoBadge(e.host)}
                   <span>Hosted by ${websiteLink(host, esc(host.name))}${e.cohost ? ' &amp; ' + esc(e.cohost) : ''}</span></p>
                 <h3 class="text-xl font-bold font-serif text-forest-900 leading-snug">${esc(e.title)}</h3>
                 <p class="text-sm text-stone-700 font-medium">${esc(whenText(e))}</p>
@@ -413,10 +419,11 @@
 
       document.getElementById('friends-list').innerHTML = FRIENDS.map((k) => {
         const h = HOSTS[k] || { name: k };
-        return `<li class="bg-white rounded-2xl border border-soil-200 shadow-sm p-5 flex items-center gap-4">${logoBadge(h, 'lg')}
+        return `<li class="${styleOf(k).bg} text-white rounded-2xl shadow-sm p-5 flex items-center gap-4 min-h-[5.5rem]">
+                  ${h.logo ? `<img src="${esc(h.logo)}" alt="${esc(h.name)} logo" class="h-12 w-auto shrink-0">` : ''}
                   <div class="min-w-0">
-                    <p class="font-bold font-serif text-forest-900 leading-snug">${esc(h.name)}</p>
-                    ${h.url ? `<p class="text-xs font-semibold uppercase tracking-wider text-forest-700 mt-1">${websiteLink(h, 'Visit website')}</p>` : ''}
+                    <p class="font-bold font-serif text-lg leading-snug">${esc(h.name)}</p>
+                    ${h.url ? `<p class="text-xs font-semibold uppercase tracking-wider text-white/85 mt-1">${websiteLink(h, 'Visit website', 'decoration-white/50 hover:text-white hover:decoration-white')}</p>` : ''}
                   </div></li>`;
       }).join('');
 
@@ -531,6 +538,6 @@
       }
     })();
   </script>
-  <script src="flier-popup.js"></script>
+  <script src="flier-popup.js?v=528c86b5"></script>
 </body>
 </html>
