@@ -49,7 +49,7 @@
         <button type="button" class="cw-flier__close" aria-label="Close">&times;</button>
         <img alt="">
         <div class="cw-flier__bar">
-          <a class="cw-flier__cta" href="events.html#${next.id}">Event details &amp; sign up</a>
+          <a class="cw-flier__cta" href="events.html#${next.id}">${next.host === 'commonwild' ? 'Event details &amp; sign up' : 'Event details'}</a>
           <button type="button" class="cw-flier__later">Maybe later</button>
         </div>
       </div>`;

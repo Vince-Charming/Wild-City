@@ -189,18 +189,21 @@
       <div class="text-center max-w-2xl mx-auto space-y-4">
         <span class="text-xs text-forest-700 font-bold uppercase tracking-wider bg-forest-100 px-3 py-1 rounded-full">Get Involved</span>
         <h2 class="text-3xl md:text-4xl font-bold font-serif text-forest-900">Events</h2>
-        <p class="text-stone-600">Workdays, skill shares, and gatherings from CommonWild and our friends around Northside. Sign up so the organizers know you&rsquo;re coming.</p>
+        <p class="text-stone-600">Workdays, skill shares, and gatherings from CommonWild and our friends around Northside. Sign up for CommonWild events so we know you&rsquo;re coming.</p>
       </div>
 
       <!-- Rendered from events-data.js by the script below -->
-      <section id="commonwild-events" aria-labelledby="commonwild-events-heading" class="space-y-6"></section>
+      <section aria-labelledby="upcoming-heading" class="space-y-6">
+        <h2 id="upcoming-heading" class="text-2xl md:text-3xl font-bold font-serif text-forest-900">Upcoming Events</h2>
+        <div id="upcoming-events" class="space-y-4"></div>
+      </section>
 
-      <section aria-labelledby="friends-heading" class="space-y-8">
+      <section aria-labelledby="friends-heading" class="space-y-6">
         <div class="border-t border-soil-200 pt-10 space-y-2">
           <h2 id="friends-heading" class="text-2xl md:text-3xl font-bold font-serif text-forest-900">Friends of CommonWild</h2>
           <p class="text-stone-600 text-sm">Neighboring groups caring for green space around Northside and the Mill Creek.</p>
         </div>
-        <div id="friends-events" class="space-y-10"></div>
+        <ul id="friends-list" class="grid grid-cols-1 sm:grid-cols-3 gap-4"></ul>
       </section>
 
       <section aria-labelledby="archive-heading" class="space-y-6">
@@ -352,12 +355,20 @@
         return `${day}, ${timeText(s)}–${timeText(en)}`;
       }
       function mapsUrl(place) {
-        return 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(place + ', Cincinnati, OH');
+        return 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(/cincinnati/i.test(place) ? place : place + ', Cincinnati, OH');
+      }
+      // Logos are white-on-transparent, so they sit on a dark green badge
+      function logoBadge(h, size) {
+        return h.logo ? `<span class="shrink-0 inline-flex items-center justify-center rounded-lg bg-forest-900 ${size === 'lg' ? 'px-3 py-2' : 'px-2 py-1'}"><img src="${esc(h.logo)}" alt="${esc(h.name)} logo" class="${size === 'lg' ? 'h-10' : 'h-6'} w-auto"></span>` : '';
+      }
+      function websiteLink(h, label) {
+        return h.url ? `<a href="${esc(h.url)}" target="_blank" rel="noopener" class="underline underline-offset-4 decoration-forest-300 hover:text-forest-900 hover:decoration-forest-700">${label}<span class="sr-only"> (opens in a new tab)</span></a>` : label;
       }
 
       function eventCard(e) {
         const s = parse(e.start);
         const month = s.toLocaleDateString('en-US', { month: 'short' });
+        const host = HOSTS[e.host] || { name: e.host };
         const details = e.details && e.details.length
           ? `<div class="text-sm text-stone-600"><p class="font-semibold text-stone-800">${esc(e.detailsHeading || 'Details')}</p>
                <ul class="list-disc pl-5 mt-1 space-y-0.5">${e.details.map((d) => `<li>${esc(d)}</li>`).join('')}</ul></div>`
@@ -376,43 +387,36 @@
                 <div class="text-2xl font-bold font-serif leading-none mt-1">${s.getDate()}</div>
               </div>
               <div class="space-y-2 min-w-0">
-                <h4 class="text-xl font-bold font-serif text-forest-900 leading-snug">${esc(e.title)}</h4>
-                ${e.cohost ? `<p class="text-xs font-semibold uppercase tracking-wider text-forest-700">With ${esc(e.cohost)}</p>` : ''}
+                <p class="flex flex-wrap items-center gap-2 text-xs font-semibold uppercase tracking-wider text-forest-700">${logoBadge(host, 'sm')}
+                  <span>Hosted by ${websiteLink(host, esc(host.name))}${e.cohost ? ' &amp; ' + esc(e.cohost) : ''}</span></p>
+                <h3 class="text-xl font-bold font-serif text-forest-900 leading-snug">${esc(e.title)}</h3>
                 <p class="text-sm text-stone-700 font-medium">${esc(whenText(e))}</p>
-                ${e.location ? `<p class="text-sm text-stone-600"><a href="${esc(mapsUrl(e.location))}" target="_blank" rel="noopener" class="underline underline-offset-4 decoration-forest-300 hover:decoration-forest-700">${esc(e.location)}</a><span class="sr-only"> (map, opens in a new tab)</span></p>` : ''}
+                ${e.location ? `<p class="text-sm text-stone-600"><a href="${esc(mapsUrl(e.mapQuery || e.location))}" target="_blank" rel="noopener" class="underline underline-offset-4 decoration-forest-300 hover:decoration-forest-700">${esc(e.location)}</a><span class="sr-only"> (map, opens in a new tab)</span></p>` : ''}
                 ${e.summary ? `<p class="text-sm text-stone-600 leading-relaxed">${esc(e.summary)}</p>` : ''}
                 ${details}
-                <div class="pt-2">
+                ${e.host === 'commonwild' ? `<div class="pt-2">
                   <button type="button" class="signup-btn px-5 py-2.5 bg-amber-500 hover:bg-amber-600 text-soil-900 font-bold rounded-xl shadow-sm text-sm transition-all focus:outline-none focus:ring-2 focus:ring-forest-500 focus:ring-offset-2" data-event="${esc(e.id)}">Sign Up</button>
-                </div>
+                </div>` : ''}
               </div>
             </div>
             ${flier}
           </article>`;
       }
 
-      function hostHeader(key, level) {
-        const h = HOSTS[key] || { name: key };
-        const tag = level === 2 ? 'h2' : 'h3';
-        const size = level === 2 ? 'text-2xl md:text-3xl' : 'text-xl md:text-2xl';
-        // Logos are white-on-transparent, so they sit on a dark green badge
-        const logo = h.logo ? `<span class="shrink-0 inline-flex items-center justify-center rounded-xl bg-forest-900 px-3 py-2"><img src="${esc(h.logo)}" alt="${esc(h.name)} logo" class="h-10 w-auto"></span>` : '';
-        const link = h.url ? `<a href="${esc(h.url)}" target="_blank" rel="noopener" class="text-xs font-semibold uppercase tracking-wider text-forest-700 hover:text-forest-900 underline underline-offset-4 decoration-forest-300">Visit website<span class="sr-only"> (opens in a new tab)</span></a>` : '';
-        return `<div class="flex flex-wrap items-center gap-x-4 gap-y-2">${logo}
-                  <${tag} id="${esc(key)}-events-heading" class="${size} font-bold font-serif text-forest-900">${esc(h.name)}</${tag}>${link}</div>`;
-      }
+      // All upcoming events, CommonWild and friends together, soonest first
+      const upcoming = EVENTS.filter((e) => !isPast(e)).sort(byStart);
+      document.getElementById('upcoming-events').innerHTML = upcoming.length
+        ? upcoming.map(eventCard).join('')
+        : '<p class="text-sm text-stone-500 italic">No upcoming events posted right now. Check back soon!</p>';
 
-      function hostSection(key, level) {
-        const upcoming = EVENTS.filter((e) => e.host === key && !isPast(e)).sort(byStart);
-        const empty = `<p class="text-sm text-stone-500 italic">No upcoming events posted right now${HOSTS[key] && HOSTS[key].url ? ' &mdash; check their website for news' : ''}.</p>`;
-        return `${hostHeader(key, level)}
-                ${HOSTS[key] && HOSTS[key].blurb ? `<p class="text-stone-600 text-sm -mt-3">${esc(HOSTS[key].blurb)}</p>` : ''}
-                <div class="space-y-4">${upcoming.length ? upcoming.map(eventCard).join('') : empty}</div>`;
-      }
-
-      document.getElementById('commonwild-events').innerHTML = hostSection('commonwild', 2);
-      document.getElementById('friends-events').innerHTML = FRIENDS
-        .map((k) => `<div class="space-y-5" aria-labelledby="${k}-events-heading" role="region">${hostSection(k, 3)}</div>`).join('');
+      document.getElementById('friends-list').innerHTML = FRIENDS.map((k) => {
+        const h = HOSTS[k] || { name: k };
+        return `<li class="bg-white rounded-2xl border border-soil-200 shadow-sm p-5 flex items-center gap-4">${logoBadge(h, 'lg')}
+                  <div class="min-w-0">
+                    <p class="font-bold font-serif text-forest-900 leading-snug">${esc(h.name)}</p>
+                    ${h.url ? `<p class="text-xs font-semibold uppercase tracking-wider text-forest-700 mt-1">${websiteLink(h, 'Visit website')}</p>` : ''}
+                  </div></li>`;
+      }).join('');
 
       // Flier archive: fliers of events that have ended, newest first
       const past = EVENTS.filter((e) => e.flier && isPast(e)).sort((a, b) => byStart(b, a));

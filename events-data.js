@@ -3,7 +3,8 @@
 // To add an event, add an entry to COMMONWILD_EVENTS. Times are local Cincinnati time ("YYYY-MM-DDTHH:MM").
 // Once an event's `end` has passed it moves to "Past events", and its flier (if it has one) moves into the
 // flier archive at the bottom of events.html. The pop-up always shows the flier of the next upcoming event.
-// `host` must be one of the keys in COMMONWILD_HOSTS.
+// `host` must be one of the keys in COMMONWILD_HOSTS. Only CommonWild events get a Sign Up button.
+// Optional `mapQuery` overrides `location` for the map link (e.g. for street corners).
 
 window.COMMONWILD_HOSTS = {
   commonwild: {
@@ -51,6 +52,8 @@ window.COMMONWILD_EVENTS = [
     title: 'Wildway Workday',
     start: '2026-10-25T10:00',
     end: '2026-10-25T13:00',
+    location: 'Corner of Glen Parker Avenue & Langland Street, Cincinnati, OH',
+    mapQuery: 'Glen Parker Ave & Langland St, Cincinnati, OH',
     summary: 'The focus is planting lots of native perennials, with some tree planting, invasive plant maintenance, and site prep for next year’s perennial planting.'
   },
   {
